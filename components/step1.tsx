@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 
 import Image from "next/image";
 
@@ -15,68 +15,86 @@ import otherIcon from "@/app/_assets/otherIcon.svg";
 
 import { Button } from "@/components/ui/button";
 
-function Card({ children }: { children: ReactNode }) {
+import * as RadioGroup from "@radix-ui/react-radio-group";
+
+function Card({
+  children,
+  radioInputValue,
+}: {
+  children: ReactNode;
+  radioInputValue: string;
+}) {
   return (
-    <div className="pt-8 pb-6 lg:w-[213px] rounded-xl card cursor-pointer min-w-[140px] w-auto flex flex-col gap-6 items-center justify-end border-2 border-b-4 border-solid border-[#E5E5E5] ">
+    <RadioGroup.Item
+      value={radioInputValue}
+      className="pt-8 pb-6 lg:w-[213px] rounded-xl card cursor-pointer min-w-[140px] w-auto flex flex-col gap-6 items-center justify-end border-2 border-b-4 border-solid border-[#E5E5E5] data-[state=checked]:border-light-blue active:border-2 active:mb-0.5 active:translate-y-1"
+    >
       {children}
-    </div>
+    </RadioGroup.Item>
   );
 }
 
 function Step1() {
+  const [selectedCard, setSelectedCard] = useState("");
   return (
     <div className="px-6 flex justify-center items-center flex-col gap-6">
       <h1 className="text-center font-bold text-[28px] text-dark-grey">
         How did you hear about Duolingo?
       </h1>
       <div className="flex flex-col gap-7 w-full lg:w-fit">
-        <div className="grid gap-2.5 md:grid-cols-4 w-full lg:w-fit grid-columns-auto">
-          <Card>
-            <Image src={redditIcon} alt="reddit icon" />
-            <h2 className="font-bold text-dark-grey text-[15px]">Reddit</h2>
-          </Card>
-          <Card>
-            <Image
-              src={instagramIcon}
-              alt="Instagram icon"
-              width="69"
-              height="69"
-            />
-            <h2 className="font-bold text-dark-grey text-[15px]">Instagram</h2>
-          </Card>
-          <Card>
-            <Image
-              src={facebookIcon}
-              alt="facebook icon"
-              width="69"
-              height="69"
-            />
-            <h2 className="font-bold text-dark-grey text-[15px]">Facebook</h2>
-          </Card>
-          <Card>
-            <Image src={tiktokIcon} alt="tiktok icon" />
-            <h2 className="font-bold text-dark-grey text-[15px]">Tiktok</h2>
-          </Card>
-          <Card>
-            <Image src={googleIcon} alt="google icon" />
-            <h2 className="font-bold text-dark-grey text-[15px]">Google</h2>
-          </Card>
-          <Card>
-            <Image src={youtubeIcon} alt="youtube icon" />
-            <h2 className="font-bold text-dark-grey text-[15px]">Youtube</h2>
-          </Card>
-          <Card>
-            <Image src={friendsAndFamilyIcon} alt="friends and family icon" />
-            <h2 className="font-bold text-dark-grey text-[15px]">
-              Friends/Family
-            </h2>
-          </Card>
-          <Card>
-            <Image src={otherIcon} alt="other icon" />
-            <h2 className="font-bold text-dark-grey text-[15px]">Other</h2>
-          </Card>
-        </div>
-        <Button className="mx-auto w-full">Continue</Button>
+        <RadioGroup.Root onValueChange={setSelectedCard} value={selectedCard}>
+          <div className="grid gap-2.5 md:grid-cols-4 w-full lg:w-fit grid-columns-auto">
+            <Card radioInputValue={"Reddit"}>
+              <Image src={redditIcon} alt="reddit icon" />
+              <h2 className="font-bold text-dark-grey text-[15px]">Reddit</h2>
+            </Card>
+            <Card radioInputValue={"Instagram"}>
+              <Image
+                src={instagramIcon}
+                alt="Instagram icon"
+                width="69"
+                height="69"
+              />
+              <h2 className="font-bold text-dark-grey text-[15px]">
+                Instagram
+              </h2>
+            </Card>
+            <Card radioInputValue={"Facebook"}>
+              <Image
+                src={facebookIcon}
+                alt="facebook icon"
+                width="69"
+                height="69"
+              />
+              <h2 className="font-bold text-dark-grey text-[15px]">Facebook</h2>
+            </Card>
+            <Card radioInputValue={"Tiktok"}>
+              <Image src={tiktokIcon} alt="tiktok icon" />
+              <h2 className="font-bold text-dark-grey text-[15px]">Tiktok</h2>
+            </Card>
+            <Card radioInputValue={"Google"}>
+              <Image src={googleIcon} alt="google icon" />
+              <h2 className="font-bold text-dark-grey text-[15px]">Google</h2>
+            </Card>
+            <Card radioInputValue={"Youtube"}>
+              <Image src={youtubeIcon} alt="youtube icon" />
+              <h2 className="font-bold text-dark-grey text-[15px]">Youtube</h2>
+            </Card>
+            <Card radioInputValue={"Friends/Family"}>
+              <Image src={friendsAndFamilyIcon} alt="friends and family icon" />
+              <h2 className="font-bold text-dark-grey text-[15px]">
+                Friends/Family
+              </h2>
+            </Card>
+            <Card radioInputValue={"Other"}>
+              <Image src={otherIcon} alt="other icon" />
+              <h2 className="font-bold text-dark-grey text-[15px]">Other</h2>
+            </Card>
+          </div>
+        </RadioGroup.Root>
+        <Button className="mx-auto w-full" disabled={!Boolean(selectedCard)}>
+          Continue
+        </Button>
       </div>
     </div>
   );
