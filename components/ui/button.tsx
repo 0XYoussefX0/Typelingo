@@ -6,17 +6,17 @@ import { cn } from "@/lib/utils";
 
 /* the is-enabled pseudo class is for anchor tags */
 const buttonVariants = cva(
-  "flex justify-center items-center rounded-2xl font-bold text-[13px] text-white border-2 border-b-4 border-solid enabled:active:border-b-0 is-enabled:active:border-b-0  enabled:active:translate-y-1 is-enabled:active:translate-y-1 disabled:text-disabled-grey disabled:bg-light-grey disabled:border-0",
+  "flex justify-center py-[11px] items-center rounded-2xl font-bold text-[13px] text-white border-2 border-b-4 border-solid disabled:text-disabled-grey disabled:bg-light-grey disabled:border-0",
   {
     variants: {
       variant: {
         default:
-          "border-[#58CC02] border-b-[#58A700] bg-[#58CC02] tracking-wider enabled:hover:brightness-110 is-enabled:hover:brightness-110",
+          "border-[#58CC02] border-b-[#58A700] bg-[#58CC02] tracking-wider enabled:hover:brightness-110 is-enabled:hover:brightness-110 active:mb-1 enabled:active:border-b-0 is-enabled:active:border-b-0 enabled:active:translate-y-1 is-enabled:active:translate-y-1",
         secondary:
-          "border-[#042C60] bg-transparent enabled:hover:brightness-90 is-enabled:hover:brightness-90",
+          "border-[#042C60] bg-transparent enabled:hover:brightness-90 is-enabled:hover:brightness-90 enabled:active:border-b-2 active:mb-0.5 is-enabled:active:border-b-2 enabled:active:translate-y-0.5 is-enabled:active:translate-y-0.5",
       },
       size: {
-        default: "w-[320px] h-[46px] ",
+        default: "w-[320px]",
       },
     },
     defaultVariants: {
