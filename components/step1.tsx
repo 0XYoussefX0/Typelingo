@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 
 function Card({ children }: { children: ReactNode }) {
   return (
-    <div className="pt-8 pb-6 lg:w-[213px] rounded-xl card cursor-pointer min-w-[140px] flex flex-col gap-6 items-center justify-end border-2 border-b-4 border-solid border-[#E5E5E5] ">
+    <div className="pt-8 pb-6 lg:w-[213px] rounded-xl card cursor-pointer min-w-[140px] w-auto flex flex-col gap-6 items-center justify-end border-2 border-b-4 border-solid border-[#E5E5E5] ">
       {children}
     </div>
   );
@@ -29,8 +29,8 @@ function Step1() {
       <h1 className="text-center font-bold text-[28px] text-dark-grey">
         How did you hear about Duolingo?
       </h1>
-      <div className="flex flex-col gap-7">
-        <div className="grid gap-2.5 lg:grid-cols-4">
+      <div className="flex flex-col gap-7 w-full lg:w-fit">
+        <div className="grid gap-2.5 md:grid-cols-4 w-full lg:w-fit grid-columns-auto">
           <Card>
             <Image src={redditIcon} alt="reddit icon" />
             <h2 className="font-bold text-dark-grey text-[15px]">Reddit</h2>

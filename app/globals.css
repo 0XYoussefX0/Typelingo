@@ -17,3 +17,6 @@
     filter: brightness(0.9)
 }
 
+.grid-columns-auto {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+}
