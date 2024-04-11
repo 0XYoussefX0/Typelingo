@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+const plugin = require('tailwindcss/plugin')
 
 const config: Config = {
   content: [
@@ -17,8 +18,16 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      colors: {
+        "dark-grey": "#4B4B4B",
+        "disabled-grey": "#AFAFAF",
+      }
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function ({ addVariant }: any) {
+      addVariant('is-enabled', '&:not([disabled])')
+  })
+  ],
 };
 export default config;
