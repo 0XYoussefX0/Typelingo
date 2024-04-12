@@ -45,6 +45,7 @@ function DiscoveryStep() {
   const nextStep = () => {
     sessionStorage.setItem("currentStepIndex", JSON.stringify(2 / 5));
     sessionStorage.setItem("selectedSource", JSON.stringify(selectedSource));
+    sessionStorage.setItem("previousStep", JSON.stringify("DiscoveryStep"));
     router.push("/getting-started?Step=DailyGoalStep");
   };
 

@@ -69,7 +69,15 @@ function Page() {
                     "currentStepIndex",
                     JSON.stringify(currentStepIndex)
                   );
-                  router.push(`/getting-started?step=${previousStep}`);
+                  const indexOfPreviousStep =
+                    availableSteps.indexOf(previousStep);
+                  if (!(indexOfPreviousStep - 1 === -1)) {
+                    sessionStorage.setItem(
+                      "previousStep",
+                      JSON.stringify(availableSteps[indexOfPreviousStep - 1])
+                    );
+                  }
+                  router.push(`/getting-started?Step=${previousStep}`);
                 },
               })}
           aria-label={

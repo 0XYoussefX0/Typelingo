@@ -23,6 +23,7 @@ function DailyGoalStep() {
   const nextStep = () => {
     sessionStorage.setItem("currentStepIndex", JSON.stringify(3 / 5));
     sessionStorage.setItem("dailyGoal", JSON.stringify(dailyGoal));
+    sessionStorage.setItem("previousStep", JSON.stringify("DailyGoalStep"));
     router.push("/getting-started?Step=NotificationsStep");
   };
 
