@@ -7,21 +7,34 @@ import backIcon from "@/app/_assets/backIcon.svg";
 
 import DiscoveryStep from "@/components/DiscoveryStep";
 import DailyGoalStep from "@/components/DailyGoalStep";
-import Step3 from "@/components/step3";
+import NotificationsStep from "@/components/NotificationsStep";
 
 import { Button } from "@/components/ui/button";
 
 import { useSearchParams, useRouter } from "next/navigation";
 
-type AvailableSteps = "DiscoveryStep" | "DailyGoalStep" | "Step3";
+type AvailableSteps = "DiscoveryStep" | "DailyGoalStep" | "NotificationsStep";
 
 function Page() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const step = (searchParams.get("Step") ?? "DiscoveryStep") as AvailableSteps;
 
-  const availableSteps = ["DiscoveryStep", "DailyGoalStep", "step3"];
+  // if there is no step param
+  if (!searchParams.get("Step")) {
+    sessionStorage.setItem("previousStep", JSON.stringify("DiscoveryStep"));
+    sessionStorage.setItem("currentStepIndex", JSON.stringify(1 / 5));
+  }
+
+  const availableSteps = [
+    "DiscoveryStep",
+    "DailyGoalStep",
+    "NotificationsStep",
+  ];
+  // if the value of the step param is not in the available steps, redirect to the first step
   if (!availableSteps.includes(step)) {
+    sessionStorage.setItem("previousStep", JSON.stringify("DiscoveryStep"));
+    sessionStorage.setItem("currentStepIndex", JSON.stringify(1 / 5));
     router.push("/getting-started?Step=DiscoveryStep");
     return;
   }
@@ -29,16 +42,16 @@ function Page() {
   const steps = {
     DiscoveryStep: <DiscoveryStep />,
     DailyGoalStep: <DailyGoalStep />,
-    Step3: <Step3 />,
+    NotificationsStep: <NotificationsStep />,
   };
 
   const isFirstStep = step === "DiscoveryStep";
 
   const previousStep = JSON.parse(
-    sessionStorage.getItem("previousStep") ?? '"DiscoveryStep"'
+    sessionStorage.getItem("previousStep") ?? JSON.stringify("DiscoveryStep")
   );
   let currentStepIndex = JSON.parse(
-    sessionStorage.getItem("currentStepIndex") ?? String(1 / 5)
+    sessionStorage.getItem("currentStepIndex") ?? JSON.stringify(1 / 5)
   );
 
   return (
