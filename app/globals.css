@@ -20,3 +20,11 @@
 .grid-columns-auto {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
 }
+.reset {
+    all: revert;
+    background-color: transparent;
+    border-color: transparent;
+    padding: 0px 0px;
+    border-width: 0px;
+    cursor: pointer;  
+}

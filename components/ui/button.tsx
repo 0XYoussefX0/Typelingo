@@ -14,9 +14,11 @@ const buttonVariants = cva(
           "border-[#58CC02] border-b-[#58A700] bg-[#58CC02] tracking-wider enabled:hover:brightness-110 is-enabled:hover:brightness-110 active:mb-1 enabled:active:border-b-0 is-enabled:active:border-b-0 enabled:active:translate-y-1 is-enabled:active:translate-y-1",
         secondary:
           "border-[#042C60] bg-transparent enabled:hover:brightness-90 is-enabled:hover:brightness-90 enabled:active:border-b-2 active:mb-0.5 is-enabled:active:border-b-2 enabled:active:translate-y-0.5 is-enabled:active:translate-y-0.5",
+        noStyling: "reset ",
       },
       size: {
         default: "w-[320px]",
+        fit: "w-fit",
       },
     },
     defaultVariants: {
