@@ -23,6 +23,9 @@ const config: Config = {
         "disabled-grey": "#AFAFAF",
         "light-blue": "#84d8ff",
         "dark-blue": "#1899d6",
+      },
+      boxShadow: {
+        "grey": "0px 2px 0px #E5E5E5"
       }
     },
   },

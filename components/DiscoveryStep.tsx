@@ -110,7 +110,7 @@ function DiscoveryStep() {
           className="mx-auto w-full"
           disabled={!Boolean(selectedSource)}
         >
-          Continue
+          CONTINUE
         </Button>
       </div>
     </div>
