@@ -21,6 +21,8 @@ const config: Config = {
       colors: {
         "dark-grey": "#4B4B4B",
         "disabled-grey": "#AFAFAF",
+        "light-blue": "#84d8ff",
+        "dark-blue": "#1899d6",
       }
     },
   },

@@ -2,7 +2,7 @@ import Image from "next/image";
 import logo from "@/app/_assets/logo.svg";
 import planet_icon from "@/app/_assets/planet_icon.svg";
 
-import { Button } from "@/components/button";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
@@ -18,11 +18,15 @@ export default function Home() {
           <h1 className="text-white font-bold text-center text-[32px] ">
             The free, fun, and effective way to
             <br />
-            learn a language!
+            Become a Typescript Wizard
           </h1>
           <div className="flex flex-col gap-3">
-            <Button>GET STARTED</Button>
-            <Button variant={"secondary"}>I ALREADY HAVE AN ACCOUNT</Button>
+            <Button href="/getting-started?Step=DiscoveryStep">
+              GET STARTED
+            </Button>
+            <Button variant={"secondary"} href="/login">
+              I ALREADY HAVE AN ACCOUNT
+            </Button>
           </div>
         </div>
       </main>
