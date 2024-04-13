@@ -8,12 +8,17 @@ import backIcon from "@/app/_assets/backIcon.svg";
 import DiscoveryStep from "@/components/DiscoveryStep";
 import DailyGoalStep from "@/components/DailyGoalStep";
 import NotificationsStep from "@/components/NotificationsStep";
+import LinkGithubStep from "@/components/LinkGithubStep";
 
 import { Button } from "@/components/ui/button";
 
 import { useSearchParams, useRouter } from "next/navigation";
 
-type AvailableSteps = "DiscoveryStep" | "DailyGoalStep" | "NotificationsStep";
+type AvailableSteps =
+  | "DiscoveryStep"
+  | "DailyGoalStep"
+  | "NotificationsStep"
+  | "LinkGithubStep";
 
 function Page() {
   const searchParams = useSearchParams();
@@ -30,6 +35,7 @@ function Page() {
     "DiscoveryStep",
     "DailyGoalStep",
     "NotificationsStep",
+    "LinkGithubStep",
   ];
   // if the value of the step param is not in the available steps, redirect to the first step
   if (!availableSteps.includes(step)) {
@@ -43,6 +49,7 @@ function Page() {
     DiscoveryStep: <DiscoveryStep />,
     DailyGoalStep: <DailyGoalStep />,
     NotificationsStep: <NotificationsStep />,
+    LinkGithubStep: <LinkGithubStep />,
   };
 
   const isFirstStep = step === "DiscoveryStep";
