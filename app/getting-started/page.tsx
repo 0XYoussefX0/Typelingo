@@ -61,6 +61,10 @@ function Page() {
     sessionStorage.getItem("currentStepIndex") ?? JSON.stringify(1 / 5)
   );
 
+  if (step === "DiscoveryStep") {
+    currentStepIndex = 1 / 5;
+  }
+
   return (
     <>
       <div className="flex gap-4 justify-center items-center w-screen pt-11">
