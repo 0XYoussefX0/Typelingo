@@ -24,7 +24,7 @@ export default function Home() {
             <Button href="/getting-started?Step=DiscoveryStep">
               GET STARTED
             </Button>
-            <Button variant={"secondary"} href="/login">
+            <Button variant={"tertiary"} href="/login">
               I ALREADY HAVE AN ACCOUNT
             </Button>
           </div>
