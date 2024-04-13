@@ -32,7 +32,19 @@ function Page() {
         </h1>
         <form className="flex flex-col gap-2 w-full">
           <Input aria-label="Email" placeholder="Email" type="email" />
-          <Input aria-label="Password" placeholder="Password" type="password" />
+          <div className="w-full relative emailInput">
+            <Input
+              aria-label="Password"
+              placeholder="Password"
+              type="password"
+            />
+            <Link
+              href="/forgot-password"
+              className="font-bold text-[13px] text-disabled-grey absolute right-4 top-1/2 -translate-y-1/2"
+            >
+              FORGOT?
+            </Link>
+          </div>
           <Button className="bg-blue-sky border-blue-sky border-b-dark-blue-sky mt-2 w-full">
             LOG IN
           </Button>

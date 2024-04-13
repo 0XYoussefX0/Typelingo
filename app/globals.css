@@ -28,3 +28,7 @@
     border-width: 0px;
     cursor: pointer;  
 }
+
+.emailInput:focus-within > a {
+display: none;
+}
