@@ -20,26 +20,21 @@ function Page() {
         <span className="pb-0.5">Go back Home</span>
       </Button>
       <Button
-        href="/login"
+        href="/signUp"
         variant={"secondary"}
         className="text-blue-sky w-fit py-[15px] px-[18px] text-sm absolute top-7 right-7 "
       >
-        Login
+        Sign Up
       </Button>
       <div className="flex flex-col items-center gap-7 w-[375px]">
         <h1 className="text-center font-bold text-2xl text-dark-grey">
-          Create your profile
+          Log in
         </h1>
         <form className="flex flex-col gap-2 w-full">
-          <Input
-            aria-label="Name (optional)"
-            placeholder="Name (optional)"
-            type="text"
-          />
           <Input aria-label="Email" placeholder="Email" type="email" />
           <Input aria-label="Password" placeholder="Password" type="password" />
           <Button className="bg-blue-sky border-blue-sky border-b-dark-blue-sky mt-2 w-full">
-            CREATE ACCOUNT
+            LOG IN
           </Button>
         </form>
         <div className="flex gap-2 items-center w-full">
