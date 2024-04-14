@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import Image from "next/image";
+import Link from "next/link";
 
 import logo from "@/app/_assets/logo.svg";
 
@@ -10,7 +11,9 @@ function Page() {
   return (
     <main className="flex flex-col  items-center h-screen">
       <nav className="bg-blue-sky justify-around w-full h-[70px] items-center flex">
-        <Image src={logo} alt="typelingo's logo" />
+        <Link href="/">
+          <Image src={logo} alt="typelingo's logo" />
+        </Link>
         <div className="flex gap-2.5">
           <Button
             href="/Login"

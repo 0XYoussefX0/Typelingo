@@ -66,7 +66,7 @@ function Page() {
   }
 
   return (
-    <>
+    <div className="flex flex-col w-full h-screen">
       <div className="flex gap-4 justify-center items-center w-screen pt-11">
         <Button
           variant="noStyling"
@@ -101,8 +101,10 @@ function Page() {
         </Button>
         <ProgressBar currentStepIndex={currentStepIndex} />
       </div>
-      <main className="mt-[163px]">{steps[step]}</main>
-    </>
+      <main className="flex-1 flex items-center justify-center my-10">
+        {steps[step]}
+      </main>
+    </div>
   );
 }
 

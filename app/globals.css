@@ -32,3 +32,65 @@
 .emailInput:focus-within > a {
 display: none;
 }
+
+
+/* styling for circular progressBar */
+.progressCircleEmpty {
+    background: 
+    radial-gradient(closest-side, white 84%, transparent 85% 100%),
+    conic-gradient(#58CC02 0%, #E5E5E5 0);    
+}
+
+.progressCircleFull {
+        background: 
+        radial-gradient(closest-side, white 84%, transparent 85% 100%),
+        conic-gradient(#58CC02 100%, #E5E5E5 0);    
+}
+
+  /* styling for circular progressBar ends here */
+
+
+.levelsLayoutContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.levelsLayoutContainer > div:nth-child(8n + 2) {
+  margin-right: 89px;
+}
+.levelsLayoutContainer > div:nth-child(8n + 3) {
+  margin-right: 115px;
+}
+.levelsLayoutContainer > div:nth-child(8n + 4) {
+  margin-right: 94px;
+}
+.levelsLayoutContainer > div:nth-child(8n + 6) {
+    margin-left: 84px;
+  }
+  .levelsLayoutContainer > div:nth-child(8n + 7) {
+    margin-left: 110px;
+  }
+  .levelsLayoutContainer > div:nth-child(8n + 8) {
+    margin-left: 89px;
+  }
+.levelsLayoutContainer > div:last-child {
+    margin: 0px 0px !important;
+  }
+
+.animate {
+   	animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+      transform: translateY(-25%) translateX(50%);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: translateY(0) translateX(50%);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+}
