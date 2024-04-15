@@ -99,7 +99,10 @@ function Page() {
         >
           <Image src={backIcon} alt="" />
         </Button>
-        <ProgressBar currentStepIndex={currentStepIndex} />
+        <ProgressBar
+          progressBarColor={"bg-[#58CC02]"}
+          currentStepIndex={currentStepIndex}
+        />
       </div>
       <main className="flex-1 flex items-center justify-center my-10">
         {steps[step]}

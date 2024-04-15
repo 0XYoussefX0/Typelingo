@@ -11,6 +11,7 @@ import homeIcon from "@/app/_assets/homeIcon.svg";
 import mLogo from "@/app/_assets/mlogo.svg";
 import LevelButton from "@/components/levelButton";
 import LevelsLayout from "@/components/levelsLayout";
+import XpProgress from "@/components/xpProgress";
 
 function Page() {
   /* make sure that you give each nav element an aria label like primary navigation and secondary navigation or something like that */
@@ -71,7 +72,7 @@ function Page() {
               <Banner
                 bannerColor="bg-[#58CC02]"
                 bannerTitle="Easy"
-                bannerText="Form basic sentences, greet people"
+                bannerText="Solidify your TypeScript foundation with these basic challenges."
               />
               <LevelsLayout>
                 {/* pass the same value of completed to the first attribute and implement some logic so that only the first element has the first attribute */}
@@ -103,9 +104,9 @@ function Page() {
             </div>
             <div className="mb-24 flex flex-col gap-[67px]">
               <Banner
-                bannerColor="bg-[#58CC02]"
+                bannerColor="bg-[#f7b500]"
                 bannerTitle="Medium"
-                bannerText="Form basic sentences, greet people"
+                bannerText="Dive deeper into TypeScript with these moderately complex exercises."
               />
               <LevelsLayout>
                 <LevelButton locked={false} />
@@ -136,9 +137,42 @@ function Page() {
             </div>
             <div className="mb-24 flex flex-col gap-[67px]">
               <Banner
-                bannerColor="bg-[#58CC02]"
+                bannerColor="bg-[#ff7f00]"
                 bannerTitle="Hard"
-                bannerText="Form basic sentences, greet people"
+                bannerText="Push your TypeScript skills with these advanced challenges."
+              />
+              <LevelsLayout>
+                <LevelButton locked={false} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                <LevelButton locked={true} />
+                {/* last element should have a prize icon */}
+              </LevelsLayout>
+            </div>
+            <div className="mb-24 flex flex-col gap-[67px]">
+              <Banner
+                bannerColor="bg-[#ff0000]"
+                bannerTitle="Extreme"
+                bannerText="Master the edge cases of TypeScript with these extreme puzzles."
               />
               <LevelsLayout>
                 <LevelButton locked={false} />
@@ -168,6 +202,7 @@ function Page() {
               </LevelsLayout>
             </div>
           </div>
+          <XpProgress />
         </div>
       </main>
     </div>

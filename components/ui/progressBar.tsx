@@ -4,7 +4,13 @@ import * as Progress from "@radix-ui/react-progress";
 
 import { useEffect, useState } from "react";
 
-function ProgressBar({ currentStepIndex }: { currentStepIndex: number }) {
+function ProgressBar({
+  currentStepIndex,
+  progressBarColor,
+}: {
+  currentStepIndex: number;
+  progressBarColor: string;
+}) {
   const [progress, setProgress] = useState(currentStepIndex * 100);
 
   useEffect(() => {
@@ -18,7 +24,7 @@ function ProgressBar({ currentStepIndex }: { currentStepIndex: number }) {
       className="h-4 w-3/4 rounded-lg bg-light-grey overflow-hidden"
     >
       <Progress.Indicator
-        className="bg-[#58CC02] rounded-lg h-full relative progressIndicator transition-transform duration-300"
+        className={`${progressBarColor} rounded-lg h-full relative progressIndicator transition-transform duration-300`}
         style={{ transform: `translateX(-${100 - progress}%)` }}
       />
     </Progress.Root>
