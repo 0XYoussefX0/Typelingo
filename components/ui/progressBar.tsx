@@ -9,7 +9,7 @@ function ProgressBar({
   progressBarColor,
 }: {
   currentStepIndex: number;
-  progressBarColor: string;
+  progressBarColor: `bg-${string}`;
 }) {
   const [progress, setProgress] = useState(currentStepIndex * 100);
 
