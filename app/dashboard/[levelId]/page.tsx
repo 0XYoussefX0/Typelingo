@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 
 import ProgressBar from "@/components/ui/progressBar";
 import { Button } from "@/components/ui/button";
@@ -11,16 +11,21 @@ import Image from "next/image";
 import Editor, { Monaco } from "@monaco-editor/react";
 import { useRouter } from "next/navigation";
 
-import { createProject, ts } from "@ts-morph/bootstrap";
+import { createProject } from "@ts-morph/bootstrap";
 
 import * as monaco from "monaco-editor";
-
 import { unstable_noStore } from "next/cache";
 
-function Page() {
-  unstable_noStore();
+import checkmarkIcon from "@/app/_assets/checkmarkIcon.svg";
 
+function Page() {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
+
+  const workerRef = useRef<Worker>();
+
+  const [challengeStatus, setChallengeStatus] = useState<
+    "passed" | "failed" | "pending" | undefined
+  >(undefined);
 
   /* the value of this variable is going to be coming from the challenges database */
   const value = `  
@@ -111,24 +116,34 @@ function Page() {
   };
 
   const check = async () => {
-    const project = await createProject({ useInMemoryFileSystem: true });
-
+    setChallengeStatus("pending");
     if (editorRef.current === undefined) return;
-
     const userCode = editorRef.current.getValue();
 
     const finalCode = typesForTesting + userCode;
-    console.log(finalCode);
 
-    project.fileSystem.writeFileSync("MyClass.ts", finalCode);
-
-    const program = project.createProgram({
-      rootNames: ["MyClass.ts"],
-      options: {},
-    });
-
-    const diagnostics = program.getSemanticDiagnostics();
+    fetch("/api", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        code: finalCode,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.solution === "correct") {
+          console.log("correct");
+          setChallengeStatus("passed");
+        } else {
+          console.log("incorrect");
+          setChallengeStatus("failed");
+        }
+      });
   };
+
+  console.log(challengeStatus);
 
   return (
     <div className="flex flex-col w-full h-screen">
@@ -160,18 +175,36 @@ function Page() {
             />
           </div>
         </div>
-        <div className="h-[140px] border-t-2 border-light-grey border-solid flex justify-between w-full items-center px-[10%]">
-          <Button
-            variant={"secondary"}
-            className="w-[149px]"
-            onClick={() => skip()}
-          >
-            SKIP
-          </Button>
-          <Button className="w-[159px]" onClick={() => check()}>
-            CHECK
-          </Button>
-        </div>
+        {challengeStatus === undefined || challengeStatus === "pending" ? (
+          <div className="h-[140px] border-t-2 border-light-grey border-solid flex justify-between w-full items-center px-[10%]">
+            <Button
+              variant={"secondary"}
+              className="w-[149px]"
+              onClick={() => skip()}
+            >
+              SKIP
+            </Button>
+            <Button
+              className="w-[159px]"
+              onClick={() => check()}
+              disabled={challengeStatus === "pending"}
+            >
+              {challengeStatus === "pending" ? "LOADING ..." : "CHECK"}
+            </Button>
+          </div>
+        ) : challengeStatus === "passed" ? (
+          <div className="bg-[#D7FFB8] h-[140px] border-t-2 border-light-grey border-solid flex justify-between w-full items-center px-[10%]">
+            <div className="flex gap-4 items-center">
+              <div className="bg-white rounded-full flex items-center justify-center">
+                <Image src={checkmarkIcon} alt="" />
+              </div>
+              <span>Good Job!!</span>
+            </div>
+            <Button className="w-[151px]">CONTINUE</Button>
+          </div>
+        ) : (
+          <div>{"didn't pass"}</div>
+        )}
       </main>
     </div>
   );
