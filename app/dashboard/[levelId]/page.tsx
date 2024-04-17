@@ -5,27 +5,39 @@ import { useRef, useState, useEffect } from "react";
 import ProgressBar from "@/components/ui/progressBar";
 import { Button } from "@/components/ui/button";
 
-import closeIcon from "@/app/_assets/closeIcon.svg";
 import Image from "next/image";
 
 import Editor, { Monaco } from "@monaco-editor/react";
 import { useRouter } from "next/navigation";
 
-import { createProject } from "@ts-morph/bootstrap";
+import { editor } from "monaco-editor";
 
-import * as monaco from "monaco-editor";
-import { unstable_noStore } from "next/cache";
-
+import closeIcon from "@/app/_assets/closeIcon.svg";
 import checkmarkIcon from "@/app/_assets/checkmarkIcon.svg";
+import XIcon from "@/app/_assets/Xicon.svg";
+import codeIcon from "@/app/_assets/codeIcon.svg";
+import videoIcon from "@/app/_assets/videoIcon.svg";
+
+import {
+  Dialog,
+  DialogPortal,
+  DialogOverlay,
+  DialogClose,
+  DialogTrigger,
+  DialogContent,
+} from "@/components/ui/dialog";
 
 function Page() {
-  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
+  const editorRef = useRef<editor.IStandaloneCodeEditor>();
 
   const workerRef = useRef<Worker>();
 
   const [challengeStatus, setChallengeStatus] = useState<
     "passed" | "failed" | "pending" | undefined
   >(undefined);
+
+  const [codeModal, setCodeModal] = useState(false);
+  const [videoModal, setVideoModal] = useState(false);
 
   /* the value of this variable is going to be coming from the challenges database */
   const value = `  
@@ -101,7 +113,7 @@ function Page() {
   }
 
   const handleEditorDidMount = (
-    editor: monaco.editor.IStandaloneCodeEditor,
+    editor: editor.IStandaloneCodeEditor,
     monaco: Monaco
   ) => {
     editorRef.current = editor;
@@ -143,70 +155,173 @@ function Page() {
       });
   };
 
-  console.log(challengeStatus);
+  const nextChallenge = () => {
+    // update the completed column of this challenge in the database
+    router.push(`/dashboard/${currentLevel + 1}`);
+  };
+
+  const showCodeModel = () => {
+    setCodeModal(true);
+  };
+
+  const showVideoModel = () => {
+    setVideoModal(true);
+  };
 
   return (
-    <div className="flex flex-col w-full h-screen">
-      <div className="flex gap-4 justify-center items-center w-screen pt-11">
-        <Button variant="noStyling" size="fit" href="/dashboard">
-          <Image src={closeIcon} alt="" />
-        </Button>
-        <ProgressBar progressBarColor={"bg-[#58CC02]"} currentStepIndex={0} />
-      </div>
-      <main className="flex-1 flex flex-col gap-20 items-center justify-between mt-10">
-        <div className="flex-1 flex flex-col items-center justify-center gap-10">
-          <div className="flex flex-col gap-5 items-center">
-            <h1 className="text-center font-bold text-[28px] text-dark-grey">
-              SLICE
-            </h1>
-            <p className="font-medium text-[#3C3C3C] text-center mx-[300px]">
-              {
-                "Implement the JavaScript Array.slice function in the type system. Slice<Arr, Start, End> takes the three argument. The output should be a subarray of Arr from index Start to End. Indexes with negative numbers should be counted from reversely."
-              }
-            </p>
-          </div>
-          <div className="rounded-2xl border-2 border-solid border-light-grey w-[80%] h-fit">
-            <Editor
-              height="40vh"
-              defaultLanguage="typescript"
-              defaultValue={value}
-              beforeMount={handleEditorWillMount}
-              onMount={handleEditorDidMount}
-            />
-          </div>
+    <>
+      <div className="flex flex-col w-full h-screen">
+        <div className="flex gap-4 justify-center items-center w-screen pt-11">
+          <Button variant="noStyling" size="fit" href="/dashboard">
+            <Image src={closeIcon} alt="" />
+          </Button>
+          <ProgressBar progressBarColor={"bg-[#58CC02]"} currentStepIndex={0} />
         </div>
-        {challengeStatus === undefined || challengeStatus === "pending" ? (
-          <div className="h-[140px] border-t-2 border-light-grey border-solid flex justify-between w-full items-center px-[10%]">
-            <Button
-              variant={"secondary"}
-              className="w-[149px]"
-              onClick={() => skip()}
-            >
-              SKIP
-            </Button>
-            <Button
-              className="w-[159px]"
-              onClick={() => check()}
-              disabled={challengeStatus === "pending"}
-            >
-              {challengeStatus === "pending" ? "LOADING ..." : "CHECK"}
-            </Button>
-          </div>
-        ) : challengeStatus === "passed" ? (
-          <div className="bg-[#D7FFB8] h-[140px] border-t-2 border-light-grey border-solid flex justify-between w-full items-center px-[10%]">
-            <div className="flex gap-4 items-center">
-              <div className="bg-white rounded-full flex items-center justify-center">
-                <Image src={checkmarkIcon} alt="" />
-              </div>
-              <span>Good Job!!</span>
+        <main className="flex-1 flex flex-col gap-20 items-center justify-between mt-10">
+          <div className="flex-1 flex flex-col items-center justify-center gap-10">
+            <div className="flex flex-col gap-5 items-center">
+              <h1 className="text-center font-bold text-[28px] text-dark-grey">
+                SLICE
+              </h1>
+              <p className="font-medium text-[#3C3C3C] text-center mx-[300px]">
+                {
+                  "Implement the JavaScript Array.slice function in the type system. Slice<Arr, Start, End> takes the three argument. The output should be a subarray of Arr from index Start to End. Indexes with negative numbers should be counted from reversely."
+                }
+              </p>
             </div>
-            <Button className="w-[151px]">CONTINUE</Button>
+            <div className="rounded-2xl border-2 border-solid border-light-grey w-[80%] h-fit">
+              <Editor
+                height="40vh"
+                defaultLanguage="typescript"
+                defaultValue={value}
+                beforeMount={handleEditorWillMount}
+                onMount={handleEditorDidMount}
+              />
+            </div>
           </div>
-        ) : (
-          <div>{"didn't pass"}</div>
-        )}
-      </main>
-    </div>
+          {challengeStatus === undefined || challengeStatus === "pending" ? (
+            <div className="h-[140px] border-t-2 border-light-grey border-solid flex justify-between w-full items-center px-[10%]">
+              <Button
+                variant={"secondary"}
+                className="w-[149px]"
+                onClick={() => skip()}
+              >
+                SKIP
+              </Button>
+              <Button
+                className="w-[159px]"
+                onClick={() => check()}
+                disabled={challengeStatus === "pending"}
+              >
+                {challengeStatus === "pending" ? "LOADING ..." : "CHECK"}
+              </Button>
+            </div>
+          ) : challengeStatus === "passed" ? (
+            <div className="bg-[#D7FFB8] h-[140px] border-t-2 border-light-grey border-solid flex justify-between w-full items-center px-[10%]">
+              <div className="flex gap-4 items-center">
+                <div className="bg-white rounded-full flex items-center justify-center w-[80px] h-[80px]">
+                  <Image src={checkmarkIcon} alt="" />
+                </div>
+                <span className="text-[#489D26] font-medium text-2xl">
+                  Good Job!!
+                </span>
+              </div>
+              <Button className="w-[151px]" onClick={() => nextChallenge()}>
+                CONTINUE
+              </Button>
+            </div>
+          ) : (
+            <div className="bg-[#FFDADC] h-[140px] border-t-2 border-light-grey border-solid flex justify-between w-full items-center px-[10%]">
+              <div className="flex gap-4 items-center">
+                <div className="bg-white rounded-full flex items-center justify-center w-[80px] h-[80px]">
+                  <Image src={XIcon} alt="" />
+                </div>
+                <div className="flex flex-col gap-4">
+                  <span className="text-[#EE282D] font-medium text-2xl">
+                    Correct solution:
+                  </span>
+                  <div className="flex gap-3">
+                    <Dialog>
+                      <DialogTrigger className="flex gap-1.5 items-center bg-transparent border-transparent p-0 border-none cursor-pointer">
+                        <Image src={codeIcon} alt="" />
+                        <span className="font-medium text-[#F35D61]">
+                          VIEW CODE SOLUTION
+                        </span>
+                      </DialogTrigger>
+                      <DialogPortal>
+                        <DialogOverlay />
+                        <DialogContent className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg">
+                          TOZTOTOTO
+                        </DialogContent>
+                      </DialogPortal>
+                    </Dialog>
+
+                    <Dialog>
+                      <DialogTrigger className="flex gap-1.5 items-center bg-transparent border-transparent p-0 border-none">
+                        <Image src={videoIcon} alt="" />
+                        <span className="font-medium text-[#F35D61]">
+                          VIEW VIDEO SOLUTION
+                        </span>
+                      </DialogTrigger>
+                      <DialogPortal>
+                        <DialogOverlay />
+                        <DialogContent className="fixed left-[50%] top-[50%] z-50 flex flex-col bg-[#fff] w-[90%] translate-x-[-50%] translate-y-[-50%] gap-4 border p-6 pt-2 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg">
+                          <DialogClose className=" flex justify-end relative  h-5 ">
+                            <Image
+                              src={closeIcon}
+                              alt=""
+                              className="absolute top-1 -right-3"
+                            />
+                          </DialogClose>
+                          <div className="relative w-full pb-[56.25%]">
+                            <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center">
+                              <iframe
+                                width="100%"
+                                height="100%"
+                                src="https://www.youtube.com/embed/_sJytCRSETQ?si=gzgBiURHs0qeta55"
+                                title="YouTube video player"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                allowfullscreen
+                              ></iframe>
+                              <div className="flex justify-center absolute -bottom-5">
+                                <a
+                                  href="https://www.youtube.com/embed/_sJytCRSETQ?si=gzgBiURHs0qeta55"
+                                  className="videoLink relative text-xs font-medium text-dark-blue-sky border-b-blue-sky border-b border-dashed"
+                                >
+                                  Readonly with Rob Meyer - Typescript Type
+                                  Challenges #7 [EASY]{" "}
+                                </a>
+                                <span className="text-dark-grey text-xs font-medium ml-1">
+                                  {" "}
+                                  © Michigan TypeScript
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </DialogPortal>
+                    </Dialog>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col gap-3">
+                <Button
+                  className="w-[151px] bg-[#FF4347] border-[#FF4347] border-b-[#EE282D]"
+                  onClick={() => nextChallenge()}
+                >
+                  RETRY
+                </Button>
+                <Button variant="secondary" className="w-[151px] bg-[#fff]">
+                  SKIP
+                </Button>
+              </div>
+            </div>
+          )}
+        </main>
+      </div>
+    </>
   );
 }
 

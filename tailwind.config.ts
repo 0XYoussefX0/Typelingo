@@ -32,6 +32,7 @@ const config: Config = {
     },
   },
   plugins: [
+    require("tailwindcss-animate"),
     plugin(function ({ addVariant }: any) {
       addVariant('is-enabled', '&:not([disabled])')
   })

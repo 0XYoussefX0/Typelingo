@@ -94,3 +94,24 @@ display: none;
       animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
     }
 }
+
+.videoLink::after {
+      background: #00b2ff;
+      content: "";
+      height: 1px;
+      left: 50%;
+      position: absolute;
+      top: 100%;
+      transform: translateX(-50%);
+      transition: width .2s ease;
+      width: 0;
+}
+.videoLink:hover {
+   border-bottom-color: transparent;
+}
+.videoLink {
+  transition: all .2s ease;
+}
+.videoLink:hover::after {
+      width: 100%;
+}
