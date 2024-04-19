@@ -1,12 +1,13 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 import Image from "next/image";
 import Link from "next/link";
 
 import githubLogo from "@/app/_assets/githubLogo.svg";
 import backIcon from "@/app/_assets/blBackIcon.svg";
+
+import LoginForm from "@/components/loginForm";
 
 function Page() {
   return (
@@ -30,25 +31,7 @@ function Page() {
         <h1 className="text-center font-bold text-2xl text-dark-grey">
           Log in
         </h1>
-        <form className="flex flex-col gap-2 w-full">
-          <Input aria-label="Email" placeholder="Email" type="email" />
-          <div className="w-full relative emailInput">
-            <Input
-              aria-label="Password"
-              placeholder="Password"
-              type="password"
-            />
-            <Link
-              href="/forgot-password"
-              className="font-bold text-[13px] text-disabled-grey absolute right-4 top-1/2 -translate-y-1/2"
-            >
-              FORGOT?
-            </Link>
-          </div>
-          <Button className="bg-blue-sky border-blue-sky border-b-dark-blue-sky mt-2 w-full">
-            LOG IN
-          </Button>
-        </form>
+        <LoginForm />
         <div className="flex gap-2 items-center w-full">
           <div className="h-0.5 bg-light-grey flex-1"></div>
           <div className="text-disabled-grey font-bold text-[13px]">OR</div>

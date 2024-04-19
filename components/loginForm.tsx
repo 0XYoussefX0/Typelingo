@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
@@ -9,9 +11,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { TSignUpSchema, signUpSchema } from "@/lib/types";
 import { useToast } from "./ui/use-toast";
-
-import { revalidatePath } from "next/cache";
-import { useRouter } from "next/navigation";
 import { Toaster } from "./ui/toaster";
 
 function SignUpForm() {
@@ -27,24 +26,30 @@ function SignUpForm() {
 
   const { toast } = useToast();
 
-  const router = useRouter();
-
   const onSubmit = async (data: TSignUpSchema) => {
-    const response = await fetch("/api/signUp", {
+    const response = await fetch("/api/login", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
       },
     });
-    console.log(response);
+
     const responseData = await response.json();
-    console.log(responseData);
 
     if (response.status === 500) {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
+        description: "Please try again",
+      });
+      return;
+    }
+
+    if (response.status === 400) {
+      toast({
+        variant: "destructive",
+        title: "Invalid login credentials",
         description: "Please try again",
       });
       return;
@@ -73,7 +78,6 @@ function SignUpForm() {
         title: "Account has been successfully created ",
         description: "Welcome to TypeLingo",
       });
-      router.push("/dashboard");
     }
 
     reset();
@@ -86,12 +90,6 @@ function SignUpForm() {
         onSubmit={handleSubmit(onSubmit)}
       >
         <Input
-          {...register("name")}
-          aria-label="Name (optional)"
-          placeholder="Name (optional)"
-          type="text"
-        />
-        <Input
           {...register("email")}
           aria-label="Email"
           placeholder="Email"
@@ -100,12 +98,20 @@ function SignUpForm() {
         {errors.email && (
           <span className="text-red-500">{errors.email.message}</span>
         )}
-        <Input
-          {...register("password")}
-          aria-label="Password"
-          placeholder="Password"
-          type="password"
-        />
+        <div className="w-full relative emailInput">
+          <Input
+            {...register("password")}
+            aria-label="Password"
+            placeholder="Password"
+            type="password"
+          />
+          <Link
+            href="/forgot-password"
+            className="font-bold text-[13px] text-disabled-grey absolute right-4 top-1/2 -translate-y-1/2"
+          >
+            FORGOT?
+          </Link>
+        </div>
         {errors.password && (
           <span className="text-red-500">{errors.password.message}</span>
         )}
@@ -113,7 +119,7 @@ function SignUpForm() {
           disabled={isSubmitting}
           className="bg-blue-sky border-blue-sky border-b-dark-blue-sky mt-2 w-full"
         >
-          {isSubmitting ? "SUBMITTING..." : "CREATE ACCOUNT"}
+          {isSubmitting ? "LOGGIN  IN..." : "LOG IN"}
         </Button>
       </form>
       <Toaster />

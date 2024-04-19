@@ -2,7 +2,6 @@ import { signUpSchema } from "@/lib/types";
 import { NextResponse } from "next/server";
 
 import { createClient } from "@/lib/supabase/server";
-import { revalidatePath } from "next/cache";
 
 export async function POST(request: Request) {
 
@@ -22,20 +21,17 @@ export async function POST(request: Request) {
 
     const supabase = createClient()
 
-    const {error} = await supabase.auth.signUp(
-        {
+    const {error} = await supabase.auth.signInWithPassword(
+    {
         email: result.data.email,
         password: result.data.password
     }
     )
 
-    // do something with the name if it exists
-
     if(error) {
-       return NextResponse.json("Something went wrong, please try again", {status: 500})
+       console.log(error.status)
+       return NextResponse.json("Invalid login credentials", {status: 400})
     }
 
-    revalidatePath("/", "layout");
     return NextResponse.json({ success: true }, { status: 200 })
-
 }
