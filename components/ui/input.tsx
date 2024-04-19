@@ -1,5 +1,4 @@
 import * as React from "react";
-import Link from "next/link";
 import { VariantProps, cva } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
@@ -11,26 +10,29 @@ const inputVariants = cva(
       variant: {
         default: "",
       },
-      size: {
+      SIZE: {
         default: "w-full h-[50px]",
       },
     },
     defaultVariants: {
       variant: "default",
-      size: "default",
+      SIZE: "default",
     },
   }
 );
 
+// SIZE should be all caps because the input element already has a size attribute
+
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement>,
-    VariantProps<typeof inputVariants> {}
+  extends React.InputHTMLAttributes<HTMLInputElement> {}
+
+export interface InputProps extends VariantProps<typeof inputVariants> {}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, variant, size, ...props }, ref) => {
+  ({ className, variant, SIZE, ...props }, ref) => {
     return (
       <input
-        className={cn(inputVariants({ variant, size, className }))}
+        className={cn(inputVariants({ variant, SIZE, className }))}
         ref={ref}
         {...props}
       />

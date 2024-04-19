@@ -7,6 +7,7 @@ import Link from "next/link";
 
 import githubLogo from "@/app/_assets/githubLogo.svg";
 import backIcon from "@/app/_assets/blBackIcon.svg";
+import SignUpForm from "@/components/signUpForm";
 
 function Page() {
   return (
@@ -30,18 +31,7 @@ function Page() {
         <h1 className="text-center font-bold text-2xl text-dark-grey">
           Create your profile
         </h1>
-        <form className="flex flex-col gap-2 w-full">
-          <Input
-            aria-label="Name (optional)"
-            placeholder="Name (optional)"
-            type="text"
-          />
-          <Input aria-label="Email" placeholder="Email" type="email" />
-          <Input aria-label="Password" placeholder="Password" type="password" />
-          <Button className="bg-blue-sky border-blue-sky border-b-dark-blue-sky mt-2 w-full">
-            CREATE ACCOUNT
-          </Button>
-        </form>
+        <SignUpForm />
         <div className="flex gap-2 items-center w-full">
           <div className="h-0.5 bg-light-grey flex-1"></div>
           <div className="text-disabled-grey font-bold text-[13px]">OR</div>

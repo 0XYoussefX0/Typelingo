@@ -184,6 +184,7 @@ function ChallengeBannner({
                               href="https://www.youtube.com/embed/_sJytCRSETQ?si=gzgBiURHs0qeta55"
                               className="videoLink relative text-xs font-medium text-dark-blue-sky border-b-blue-sky border-b border-dashed"
                             >
+                              {/* use the title of the challenge + remove the with x person + change the #number to the challengeId and then change the challenge type that is inside the square brackets */}
                               Readonly with Rob Meyer - Typescript Type
                               Challenges #7 [EASY]{" "}
                             </a>
