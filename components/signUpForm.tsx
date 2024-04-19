@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { TSignUpSchema, signUpSchema } from "@/lib/types";
+import { useToast } from "./ui/use-toast";
 
 function SignUpForm() {
   const {
@@ -20,6 +21,8 @@ function SignUpForm() {
     resolver: zodResolver(signUpSchema),
   });
 
+  const { toast } = useToast();
+
   const onSubmit = async (data: TSignUpSchema) => {
     const response = await fetch("/api/signUp", {
       method: "POST",
@@ -30,6 +33,15 @@ function SignUpForm() {
     });
 
     const responseData = await response.json();
+
+    if (response.status === 500) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "Please try again",
+      });
+      return;
+    }
 
     if (responseData.errors) {
       const errors = responseData.errors;
@@ -46,6 +58,14 @@ function SignUpForm() {
           message: errors.password,
         });
       }
+      return;
+    }
+
+    if (response.ok) {
+      toast({
+        title: "Account has been successfully created ",
+        description: "Welcome to TypeLingo",
+      });
     }
 
     reset();
