@@ -29,10 +29,30 @@ function SignUpForm() {
 
   const router = useRouter();
 
+  const multiStepFormData: { [key: string]: string | boolean } = {
+    cameFrom: sessionStorage.getItem("selectedSource")
+      ? JSON.parse(sessionStorage.getItem("selectedSource") as string)
+      : "other",
+    linkedGithub: sessionStorage.getItem("LinkGithub")
+      ? JSON.parse(sessionStorage.getItem("LinkGithub") as string)
+      : false,
+    enabled_notifications: sessionStorage.getItem("activatedNotifications")
+      ? JSON.parse(sessionStorage.getItem("activatedNotifications") as string)
+      : false,
+    goal: sessionStorage.getItem("dailyGoal")
+      ? JSON.parse(sessionStorage.getItem("dailyGoal") as string).substring(
+          0,
+          2
+        )
+      : "10",
+  };
   const onSubmit = async (data: TSignUpSchema) => {
     const response = await fetch("/api/signUp", {
       method: "POST",
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        signUpFormData: data,
+        multiStepFormData,
+      }),
       headers: {
         "Content-Type": "application/json",
       },
