@@ -2,17 +2,22 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 import { createClient } from './lib/supabase/server';
 
-
+import { websiteDomain } from './lib/utils';
 
 export async function middleware(request: NextRequest) {
     const response = await updateSession(request)
+
     const supabase = createClient()
     const { data, error } = await supabase.auth.getUser();
-    if (request.nextUrl.pathname.startsWith('/dashboard') && !data?.user) {
-        const url = request.nextUrl.clone()
-        url.pathname = '/login'
-        return NextResponse.redirect(url);
-      }
+
+    const pathname = request.nextUrl.pathname
+
+    if (pathname.startsWith('/dashboard') && !data?.user) {
+        return NextResponse.redirect(`${websiteDomain}/login`);
+    }
+    else if ((pathname.startsWith('/getting-started') || pathname === "/") && data?.user) {
+        return NextResponse.redirect(`${websiteDomain}/dashboard`);
+    }
   return response
 }
 
