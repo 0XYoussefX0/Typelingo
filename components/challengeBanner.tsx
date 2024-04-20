@@ -23,6 +23,11 @@ import {
 
 import { create } from "zustand";
 
+import { typesForTesting } from "@/lib/types";
+
+import { editorRefStore } from "./ui/codeEditor";
+import { useEffect } from "react";
+
 type ChallengeStatusStore = {
   challengeStatus: "passed" | "failed" | "pending" | "exit" | undefined;
   setChallengeStatus: (status: ChallengeStatusStore["challengeStatus"]) => void;
@@ -54,40 +59,49 @@ function ChallengeBannner({
     (state) => state.setChallengeStatus
   );
 
+  const editorRef = editorRefStore((state) => state.editorRef);
+
   const router = useRouter();
 
-  const skip = () => {
-    // update the completed column in the database
-    router.push(`/dashboard/challenges?challengeId=${currentChallengeId + 1}`);
-  };
+  useEffect(() => {
+    setChallengeStatus(undefined);
+  }, [currentChallengeId]);
 
   const check = async () => {
-    // setChallengeStatus("pending");
-    // if (editorRef.current === undefined) return;
-    // const userCode = editorRef.current.getValue();
+    setChallengeStatus("pending");
+    if (!editorRef) return;
+    const userCode = editorRef.getValue();
 
-    // const finalCode = typesForTesting + userCode;
+    const finalCode = typesForTesting + userCode;
 
-    // fetch("/api", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     code: finalCode,
-    //   }),
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     if (data.solution === "correct") {
-    //       console.log("correct");
-    //       setChallengeStatus("passed");
-    //     } else {
-    //       console.log("incorrect");
-    //       setChallengeStatus("failed");
-    //     }
-    //   });
-    setChallengeStatus("passed");
+    fetch("/api", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        code: finalCode,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.solution === "correct") {
+          console.log("correct");
+          setChallengeStatus("passed");
+        } else {
+          console.log("incorrect");
+          setChallengeStatus("failed");
+        }
+      });
+  };
+
+  const retry = () => {
+    setChallengeStatus(undefined);
+  };
+
+  const skip = () => {
+    // update the completed column in the database to skipped
+    nextChallenge();
   };
 
   const nextChallenge = () => {
@@ -97,13 +111,19 @@ function ChallengeBannner({
       router.push(
         `/dashboard/challenges?challengeId=${currentChallengeId + 1}`
       );
-    }, 300);
+    }, 0);
   };
+
   return (
     <>
-      {challengeStatus === undefined || challengeStatus === "pending" ? (
+      {challengeStatus === undefined ||
+      challengeStatus === "pending" ||
+      challengeStatus === "exit" ? (
         <div className="h-[140px] border-t-2 border-light-grey border-solid flex justify-between w-full items-center px-[10%]">
           <Button
+            disabled={
+              challengeStatus === "exit" || challengeStatus === "pending"
+            }
             variant={"secondary"}
             className="w-[149px]"
             onClick={() => skip()}
@@ -113,7 +133,9 @@ function ChallengeBannner({
           <Button
             className="w-[159px]"
             onClick={() => check()}
-            disabled={challengeStatus === "pending"}
+            disabled={
+              challengeStatus === "exit" || challengeStatus === "pending"
+            }
           >
             {challengeStatus === "pending" ? "LOADING ..." : "CHECK"}
           </Button>
@@ -132,7 +154,7 @@ function ChallengeBannner({
             CONTINUE
           </Button>
         </div>
-      ) : (
+      ) : challengeStatus === "failed" ? (
         <div className="bg-[#FFDADC] h-[140px] border-t-2 border-light-grey border-solid flex justify-between w-full items-center px-[10%]">
           <div className="flex gap-4 items-center">
             <div className="bg-white rounded-full flex items-center justify-center w-[80px] h-[80px]">
@@ -213,16 +235,20 @@ function ChallengeBannner({
           <div className="flex flex-col gap-3">
             <Button
               className="w-[151px] bg-[#FF4347] border-[#FF4347] border-b-[#EE282D]"
-              onClick={() => nextChallenge()}
+              onClick={() => retry()}
             >
               RETRY
             </Button>
-            <Button variant="secondary" className="w-[151px] bg-[#fff]">
+            <Button
+              variant="secondary"
+              className="w-[151px] bg-[#fff]"
+              onClick={() => skip()}
+            >
               SKIP
             </Button>
           </div>
         </div>
-      )}
+      ) : null}
     </>
   );
 }
