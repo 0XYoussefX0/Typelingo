@@ -12,11 +12,17 @@ type LevelButtonProps = {
   locked: boolean;
   completed: boolean;
   first: boolean;
+  id: number;
 };
-function LevelButton({ locked, completed, first }: LevelButtonProps) {
+function LevelButton({ locked, completed, first, id }: LevelButtonProps) {
   return (
     <div className="relative flex justify-center items-center w-[98px] h-[93px]">
-      <Button variant={"level"} size="level" disabled={locked}>
+      <Button
+        href={`/dashboard/challenges?challengeId=${id}`}
+        variant={"level"}
+        size="level"
+        disabled={locked}
+      >
         {locked ? (
           <Image src={lockIcon} alt="" />
         ) : (

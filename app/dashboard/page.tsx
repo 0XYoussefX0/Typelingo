@@ -5,15 +5,58 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Banner from "@/components/banner";
 
-import streakIcon from "@/app/_assets/streakIcon.svg";
 import homeIcon from "@/app/_assets/homeIcon.svg";
 
 import mLogo from "@/app/_assets/mlogo.svg";
 import LevelButton from "@/components/levelButton";
 import LevelsLayout from "@/components/levelsLayout";
 import XpProgress from "@/components/xpProgress";
+import { createClient } from "@/lib/supabase/server";
+import { User } from "@supabase/supabase-js";
 
-function Page() {
+async function Page() {
+  const supabase = createClient();
+
+  const { data: userSession, error: userSessionError } =
+    await supabase.auth.getUser();
+
+  // user is going to be defined since this route is protected by the middleware
+  const user = userSession.user as User;
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("userId", user.id)
+    .single();
+
+  if (!data) {
+    return <div>User not found</div>;
+  }
+
+  const { data: challengesData, error: challengesError } = await supabase
+    .from("challenges")
+    .select("id, type");
+
+  if (!challengesData || challengesError) {
+    return <div>Error</div>;
+  }
+
+  const easyChallenges = [];
+  const mediumChallenges = [];
+  const hardChallenges = [];
+  const extremeChallenges = [];
+
+  for (const challenge of challengesData) {
+    if (challenge.type === "easy") {
+      easyChallenges.push(challenge);
+    } else if (challenge.type === "medium") {
+      mediumChallenges.push(challenge);
+    } else if (challenge.type === "hard") {
+      hardChallenges.push(challenge);
+    } else if (challenge.type === "extreme") {
+      extremeChallenges.push(challenge);
+    }
+  }
   /* make sure that you give each nav element an aria label like primary navigation and secondary navigation or something like that */
   return (
     <div className="flex items-start">
@@ -46,11 +89,7 @@ function Page() {
           <Link href="/" className="hidden lg:inline">
             <Image src={logo} alt="typelingo's Logo" />
           </Link>
-          <div className="flex-1 lg:flex-none flex items-center gap-8 justify-between">
-            <div className="flex items-center gap-1.5">
-              <Image src={streakIcon} alt="" />
-              <div className="text-[#FF9600] font-bold">0</div>
-            </div>
+          <div className="flex-1 lg:flex-none flex items-center gap-8 justify-end">
             <div className="rounded-full w-9 h-9 bg-black">
               {/* <Image src={userImage} alt="" /> */}
             </div>
@@ -75,31 +114,27 @@ function Page() {
                 bannerText="Solidify your TypeScript foundation with these basic challenges."
               />
               <LevelsLayout>
-                {/* pass the same value of completed to the first attribute and implement some logic so that only the first element has the first attribute */}
-                <LevelButton locked={false} completed={false} first={false} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                {/* last element should have a prize icon */}
+                {easyChallenges.map(({ id }, index) => {
+                  {
+                    /* pass the same value of completed to the first attribute and implement some logic so that only the first element has the first attribute */
+                  }
+                  {
+                    /* last element should have a prize icon */
+                  }
+                  // remove the type casting once the type of levels completed no longer can be null
+                  const completed = data.levels_completed?.includes(
+                    id
+                  ) as boolean;
+                  return (
+                    <LevelButton
+                      key={id}
+                      id={id}
+                      locked={!completed}
+                      completed={completed}
+                      first={index === 0}
+                    />
+                  );
+                })}
               </LevelsLayout>
             </div>
             <div className="mb-24 flex flex-col gap-[67px]">
@@ -109,30 +144,27 @@ function Page() {
                 bannerText="Dive deeper into TypeScript with these moderately complex exercises."
               />
               <LevelsLayout>
-                <LevelButton locked={false} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                {/* last element should have a prize icon */}
+                {mediumChallenges.map(({ id }, index) => {
+                  {
+                    /* pass the same value of completed to the first attribute and implement some logic so that only the first element has the first attribute */
+                  }
+                  {
+                    /* last element should have a prize icon */
+                  }
+                  // remove the type casting once the type of levels completed no longer can be null
+                  const completed = data.levels_completed?.includes(
+                    id
+                  ) as boolean;
+                  return (
+                    <LevelButton
+                      key={id}
+                      id={id}
+                      locked={!completed}
+                      completed={completed}
+                      first={index === 0}
+                    />
+                  );
+                })}
               </LevelsLayout>
             </div>
             <div className="mb-24 flex flex-col gap-[67px]">
@@ -142,30 +174,27 @@ function Page() {
                 bannerText="Push your TypeScript skills with these advanced challenges."
               />
               <LevelsLayout>
-                <LevelButton locked={false} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                {/* last element should have a prize icon */}
+                {hardChallenges.map(({ id }, index) => {
+                  {
+                    /* pass the same value of completed to the first attribute and implement some logic so that only the first element has the first attribute */
+                  }
+                  {
+                    /* last element should have a prize icon */
+                  }
+                  // remove the type casting once the type of levels completed no longer can be null
+                  const completed = data.levels_completed?.includes(
+                    id
+                  ) as boolean;
+                  return (
+                    <LevelButton
+                      key={id}
+                      id={id}
+                      locked={!completed}
+                      completed={completed}
+                      first={index === 0}
+                    />
+                  );
+                })}
               </LevelsLayout>
             </div>
             <div className="mb-24 flex flex-col gap-[67px]">
@@ -175,30 +204,27 @@ function Page() {
                 bannerText="Master the edge cases of TypeScript with these extreme puzzles."
               />
               <LevelsLayout>
-                <LevelButton locked={false} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                <LevelButton locked={true} />
-                {/* last element should have a prize icon */}
+                {extremeChallenges.map(({ id }, index) => {
+                  {
+                    /* pass the same value of completed to the first attribute and implement some logic so that only the first element has the first attribute */
+                  }
+                  {
+                    /* last element should have a prize icon */
+                  }
+                  // remove the type casting once the type of levels completed no longer can be null
+                  const completed = data.levels_completed?.includes(
+                    id
+                  ) as boolean;
+                  return (
+                    <LevelButton
+                      key={id}
+                      id={id}
+                      locked={!completed}
+                      completed={completed}
+                      first={index === 0}
+                    />
+                  );
+                })}
               </LevelsLayout>
             </div>
           </div>
