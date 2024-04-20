@@ -22,12 +22,13 @@ function LevelButton({ locked, completed, first, id }: LevelButtonProps) {
         variant={"level"}
         size="level"
         disabled={locked}
+        aria-label={`link to challenge ${id}`}
       >
         {locked ? (
           <Image src={lockIcon} alt="" />
-        ) : (
+        ) : first ? (
           <Image src={starIcon} alt="" />
-        )}
+        ) : null}
       </Button>
 
       {first && (

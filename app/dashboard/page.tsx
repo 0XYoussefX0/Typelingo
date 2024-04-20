@@ -228,7 +228,7 @@ async function Page() {
               </LevelsLayout>
             </div>
           </div>
-          <XpProgress />
+          <XpProgress xpProgress={data.xp as number[]} />
         </div>
       </main>
     </div>

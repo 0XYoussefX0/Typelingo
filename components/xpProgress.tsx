@@ -6,43 +6,37 @@ import Image from "next/image";
 import ProgressBar from "./ui/progressBar";
 
 import { ResponsiveLine } from "@nivo/line";
-function XpProgress() {
+
+type XpProgressProps = {
+  xpProgress: number[];
+};
+function XpProgress({ xpProgress }: XpProgressProps) {
+  const daysOfWeek = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+  let days = [];
+
+  let d = new Date();
+  for (let i = 0; i < 7; i++) {
+    d.setDate(d.getDate() - (6 - i));
+    days.push(daysOfWeek[d.getDay()]);
+  }
+
+  const chartData = [];
+
+  for (let i = 0; i < 7; i++) {
+    chartData.push({
+      x: days[i],
+      y: xpProgress[i],
+    });
+  }
+
   const data = [
     {
       id: "XP",
       color: "hsl(9, 70%, 50%)",
-      data: [
-        {
-          x: "M",
-          y: 0,
-        },
-        {
-          x: "Tu",
-          y: 0,
-        },
-        {
-          x: "W",
-          y: 20,
-        },
-        {
-          x: "Th",
-          y: 90,
-        },
-        {
-          x: "F",
-          y: 2,
-        },
-        {
-          x: "Sa",
-          y: 0,
-        },
-        {
-          x: "Su",
-          y: 500,
-        },
-      ],
+      data: chartData,
     },
   ];
+
   return (
     <div className="rounded-2xl p-6 hidden w-[380px] xl:flex xl:flex-col xl:gap-5 border-2 border-solid border-light-grey h-fit">
       <h1 className="font-bold text-[22px] text-dark-grey">XP Progress</h1>
