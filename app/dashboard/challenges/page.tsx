@@ -3,48 +3,48 @@ import { Code } from "bright";
 import Challenge from "@/components/challenge";
 import ChallengeBannner from "@/components/challengeBanner";
 import ChallengeProgressBar from "@/components/challengeProgressBar";
+import { createClient } from "@/lib/supabase/server";
 
-function Page({
+async function Page({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const currentChallengeId = searchParams.challengeId ?? 1;
 
-  /* the value of this variable is going to be coming from the challenges database */
-  const value = `  
+  const supabase = createClient();
 
-  /* _____________ Your Code Here _____________ */
+  const { data, error } = await supabase
+    .from("challenges")
+    .select("*")
+    .eq("id", currentChallengeId)
+    .single();
 
-  type Flatten<S extends any[], T extends any[] = []> =  S extends [infer X, ...infer Y] ? 
-    X extends any[] ?
-     Flatten<[...X, ...Y], T> : Flatten<[...Y], [...T, X]> 
-    : T
-  
-  type cases = [
-    Expect<Equal<Flatten<[]>, []>>,
-    Expect<Equal<Flatten<[1, 2, 3, 4]>, [1, 2, 3, 4]>>,
-    Expect<Equal<Flatten<[1, [2]]>, [1, 2]>>,
-    Expect<Equal<Flatten<[1, 2, [3, 4], [[[5]]]]>, [1, 2, 3, 4, 5]>>,
-    Expect<Equal<Flatten<[{ foo: 'bar', 2: 10 }, 'foobar']>, [{ foo: 'bar', 2: 10 }, 'foobar']>>,
-  ]
-  
-  // @ts-expect-error
-  type error = Flatten<'1'>
-  
-  `;
+  if (!data) {
+    return <div>Challenge not found</div>;
+  }
 
-  return (
-    <>
-      <div className="flex flex-col w-full h-screen">
-        <ChallengeProgressBar />
-        <Challenge />
-        <ChallengeBannner currentChallengeId={Number(currentChallengeId)}>
-          <Code lang="ts">{value}</Code>
-        </ChallengeBannner>
-      </div>
-    </>
-  );
+  if (data)
+    return (
+      <>
+        <div className="flex flex-col w-full h-screen">
+          <ChallengeProgressBar />
+          <Challenge
+            challengeTitle={data.name}
+            challengeCode={data.code}
+            challengeDescription={data.description}
+          />
+          <ChallengeBannner
+            currentChallengeId={Number(currentChallengeId)}
+            videoSolutionLink={data.video_solution}
+            challengeName={data.name}
+            challengeType={data.type}
+          >
+            <Code lang="ts">{data.code_solution}</Code>
+          </ChallengeBannner>
+        </div>
+      </>
+    );
 }
 
 export default Page;

@@ -32,13 +32,21 @@ export const challengeStatusStore = create<ChallengeStatusStore>((set) => ({
   setChallengeStatus: (status) => set({ challengeStatus: status }),
 }));
 
+type ChallengeBannerProps = {
+  currentChallengeId: number;
+  challengeName: string;
+  videoSolutionLink: string;
+  challengeType: Challenge["type"];
+  children: React.ReactNode;
+};
+
 function ChallengeBannner({
   currentChallengeId,
+  challengeName,
+  videoSolutionLink,
+  challengeType,
   children,
-}: {
-  currentChallengeId: number;
-  children: React.ReactNode;
-}) {
+}: ChallengeBannerProps) {
   const challengeStatus = challengeStatusStore(
     (state) => state.challengeStatus
   );
@@ -172,7 +180,7 @@ function ChallengeBannner({
                           <iframe
                             width="100%"
                             height="100%"
-                            src="https://www.youtube.com/embed/_sJytCRSETQ?si=gzgBiURHs0qeta55"
+                            src={videoSolutionLink}
                             title="YouTube video player"
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -181,12 +189,13 @@ function ChallengeBannner({
                           ></iframe>
                           <div className="flex justify-center absolute -bottom-5">
                             <a
-                              href="https://www.youtube.com/embed/_sJytCRSETQ?si=gzgBiURHs0qeta55"
+                              href={videoSolutionLink}
                               className="videoLink relative text-xs font-medium text-dark-blue-sky border-b-blue-sky border-b border-dashed"
                             >
                               {/* use the title of the challenge + remove the with x person + change the #number to the challengeId and then change the challenge type that is inside the square brackets */}
-                              Readonly with Rob Meyer - Typescript Type
-                              Challenges #7 [EASY]{" "}
+                              {challengeName} - Typescript Type Challenges #
+                              {currentChallengeId} [
+                              {challengeType.toUpperCase()}]{" "}
                             </a>
                             <span className="text-dark-grey text-xs font-medium ml-1">
                               {" "}
