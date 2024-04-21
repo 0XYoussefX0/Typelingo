@@ -8,18 +8,7 @@ import githubLogo from "@/app/_assets/githubLogo.svg";
 import backIcon from "@/app/_assets/blBackIcon.svg";
 
 import LoginForm from "@/components/loginForm";
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
-
 async function Page() {
-  const supabase = createClient();
-
-  const { error, data } = await supabase.auth.getUser();
-
-  if (data.user) {
-    redirect("/dashboard");
-  }
-
   return (
     <main className="relative flex justify-center items-center h-screen">
       <Button

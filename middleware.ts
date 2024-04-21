@@ -15,7 +15,7 @@ export async function middleware(request: NextRequest) {
     if (pathname.startsWith('/dashboard') && !data?.user) {
         return NextResponse.redirect(`${websiteDomain}/login`);
     }
-    else if ((pathname.startsWith('/getting-started') || pathname === "/") && data?.user) {
+    else if ((pathname.startsWith('/getting-started') || pathname === "/" || pathname === "/signUp" || pathname === "/login") && data?.user) {
         return NextResponse.redirect(`${websiteDomain}/dashboard`);
     }
   return response
