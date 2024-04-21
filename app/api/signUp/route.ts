@@ -31,15 +31,16 @@ export async function POST(request: Request) {
         )
 
 if('multiStepFormData' in body) {   
-    const { cameFrom, linkedGithub, enabled_notifications, goal } = body.multiStepFormData as { cameFrom: string, linkedGithub: boolean, enabled_notifications: boolean, goal: Enums<"goal"> }
+    const { cameFrom, linkedGithub, enabled_notifications, goal } = body.multiStepFormData as { cameFrom: Enums<"social_media">, linkedGithub: boolean, enabled_notifications: boolean, goal: Enums<"goal"> }
 
     const { error: profilesError } = await supabase
     .from('profiles')
-    .insert({ name: result.data.name, userid: user.user?.id, cameFrom, linkedGithub, enabled_notifications, goal, levels_completed: [], levels_skipped: [], xp: [0, 0, 0, 0, 0, 0, 0], time_spent_last_24h: 0})
-
+    .insert({ name: result.data.name, userid: user.user?.id, camefrom: cameFrom, linkedgithub: linkedGithub, enabled_notifications, goal, levels_completed: [], levels_skipped: [], xp: [0, 0, 0, 0, 0, 0, 0], time_spent_last_24h: 0})
 
     // handle profilesError
 }
+
+
         
     
         if(signUpError) {

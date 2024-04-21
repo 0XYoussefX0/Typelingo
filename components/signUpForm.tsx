@@ -32,7 +32,7 @@ function SignUpForm() {
   const multiStepFormData: { [key: string]: string | boolean } = {
     cameFrom: sessionStorage.getItem("selectedSource")
       ? JSON.parse(sessionStorage.getItem("selectedSource") as string)
-      : "other",
+      : "Other",
     linkedGithub: sessionStorage.getItem("LinkGithub")
       ? JSON.parse(sessionStorage.getItem("LinkGithub") as string)
       : false,
@@ -40,9 +40,13 @@ function SignUpForm() {
       ? JSON.parse(sessionStorage.getItem("activatedNotifications") as string)
       : false,
     goal: sessionStorage.getItem("dailyGoal")
-      ? JSON.parse(sessionStorage.getItem("dailyGoal") as string).substring(
-          0,
-          2
+      ? String(
+          Number(
+            JSON.parse(sessionStorage.getItem("dailyGoal") as string).substring(
+              0,
+              2
+            )
+          )
         )
       : "10",
   };
@@ -93,6 +97,7 @@ function SignUpForm() {
         title: "Account has been successfully created ",
         description: "Welcome to TypeLingo",
       });
+      sessionStorage.clear();
       router.push("/dashboard");
     }
 
