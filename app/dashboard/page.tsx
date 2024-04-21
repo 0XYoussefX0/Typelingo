@@ -13,6 +13,13 @@ import LevelsLayout from "@/components/levelsLayout";
 import XpProgress from "@/components/xpProgress";
 import { createClient } from "@/lib/supabase/server";
 import { User } from "@supabase/supabase-js";
+import { Enums } from "@/lib/database.types";
+
+type ChallengeWithNextId = {
+  id: number;
+  type: Enums<"challenge_type">;
+  nextChallengeId: number;
+};
 
 async function Page() {
   const supabase = createClient();
@@ -26,7 +33,7 @@ async function Page() {
   const { data, error } = await supabase
     .from("profiles")
     .select("*")
-    .eq("userId", user.id)
+    .eq("userid", user.id)
     .single();
 
   if (!data) {
@@ -41,12 +48,19 @@ async function Page() {
     return <div>Error</div>;
   }
 
-  const easyChallenges = [];
-  const mediumChallenges = [];
-  const hardChallenges = [];
-  const extremeChallenges = [];
+  const easyChallenges: ChallengeWithNextId[] = [];
+  const mediumChallenges: ChallengeWithNextId[] = [];
+  const hardChallenges: ChallengeWithNextId[] = [];
+  const extremeChallenges: ChallengeWithNextId[] = [];
 
-  for (const challenge of challengesData) {
+  challengesData.sort((a, b) => a.id - b.id);
+
+  for (let i = 0; i < challengesData.length; i++) {
+    const challenge: ChallengeWithNextId = {
+      ...challengesData[i],
+      nextChallengeId:
+        challengesData[i === challengesData.length - 1 ? 0 : i + 1].id,
+    };
     if (challenge.type === "easy") {
       easyChallenges.push(challenge);
     } else if (challenge.type === "medium") {
@@ -57,6 +71,7 @@ async function Page() {
       extremeChallenges.push(challenge);
     }
   }
+
   /* make sure that you give each nav element an aria label like primary navigation and secondary navigation or something like that */
   return (
     <div className="flex items-start">
@@ -114,24 +129,17 @@ async function Page() {
                 bannerText="Solidify your TypeScript foundation with these basic challenges."
               />
               <LevelsLayout>
-                {easyChallenges.map(({ id }, index) => {
-                  {
-                    /* pass the same value of completed to the first attribute and implement some logic so that only the first element has the first attribute */
-                  }
-                  {
-                    /* last element should have a prize icon */
-                  }
-                  // remove the type casting once the type of levels completed no longer can be null
-                  const completed = data.levels_completed?.includes(
-                    id
-                  ) as boolean;
+                {easyChallenges.map(({ id, nextChallengeId }, index) => {
+                  const completed = data.levels_completed.includes(id);
                   return (
                     <LevelButton
+                      nextChallengeId={nextChallengeId}
                       key={id}
                       id={id}
-                      locked={!completed}
+                      locked={index === 0 ? false : !completed}
                       completed={completed}
                       first={index === 0}
+                      last={index === easyChallenges.length - 1}
                     />
                   );
                 })}
@@ -144,24 +152,17 @@ async function Page() {
                 bannerText="Dive deeper into TypeScript with these moderately complex exercises."
               />
               <LevelsLayout>
-                {mediumChallenges.map(({ id }, index) => {
-                  {
-                    /* pass the same value of completed to the first attribute and implement some logic so that only the first element has the first attribute */
-                  }
-                  {
-                    /* last element should have a prize icon */
-                  }
-                  // remove the type casting once the type of levels completed no longer can be null
-                  const completed = data.levels_completed?.includes(
-                    id
-                  ) as boolean;
+                {mediumChallenges.map(({ id, nextChallengeId }, index) => {
+                  const completed = data.levels_completed.includes(id);
                   return (
                     <LevelButton
+                      nextChallengeId={nextChallengeId}
                       key={id}
                       id={id}
-                      locked={!completed}
+                      locked={index === 0 ? false : !completed}
                       completed={completed}
                       first={index === 0}
+                      last={index === mediumChallenges.length - 1}
                     />
                   );
                 })}
@@ -174,24 +175,17 @@ async function Page() {
                 bannerText="Push your TypeScript skills with these advanced challenges."
               />
               <LevelsLayout>
-                {hardChallenges.map(({ id }, index) => {
-                  {
-                    /* pass the same value of completed to the first attribute and implement some logic so that only the first element has the first attribute */
-                  }
-                  {
-                    /* last element should have a prize icon */
-                  }
-                  // remove the type casting once the type of levels completed no longer can be null
-                  const completed = data.levels_completed?.includes(
-                    id
-                  ) as boolean;
+                {hardChallenges.map(({ id, nextChallengeId }, index) => {
+                  const completed = data.levels_completed.includes(id);
                   return (
                     <LevelButton
+                      nextChallengeId={nextChallengeId}
                       key={id}
                       id={id}
-                      locked={!completed}
+                      locked={index === 0 ? false : !completed}
                       completed={completed}
                       first={index === 0}
+                      last={index === hardChallenges.length - 1}
                     />
                   );
                 })}
@@ -204,24 +198,17 @@ async function Page() {
                 bannerText="Master the edge cases of TypeScript with these extreme puzzles."
               />
               <LevelsLayout>
-                {extremeChallenges.map(({ id }, index) => {
-                  {
-                    /* pass the same value of completed to the first attribute and implement some logic so that only the first element has the first attribute */
-                  }
-                  {
-                    /* last element should have a prize icon */
-                  }
-                  // remove the type casting once the type of levels completed no longer can be null
-                  const completed = data.levels_completed?.includes(
-                    id
-                  ) as boolean;
+                {extremeChallenges.map(({ id, nextChallengeId }, index) => {
+                  const completed = data.levels_completed.includes(id);
                   return (
                     <LevelButton
+                      nextChallengeId={nextChallengeId}
                       key={id}
                       id={id}
-                      locked={!completed}
+                      locked={index === 0 ? false : !completed}
                       completed={completed}
                       first={index === 0}
+                      last={index === extremeChallenges.length - 1}
                     />
                   );
                 })}

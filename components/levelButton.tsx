@@ -3,28 +3,42 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import * as Progress from "@radix-ui/react-progress";
 
 import starIcon from "@/app/_assets/starIcon.svg";
 import lockIcon from "@/app/_assets/lockIcon.svg";
+import prizeIcon from "@/app/_assets/prizeIcon.svg";
 
 type LevelButtonProps = {
   locked: boolean;
   completed: boolean;
   first: boolean;
   id: number;
+  nextChallengeId: number;
+  last: boolean;
 };
-function LevelButton({ locked, completed, first, id }: LevelButtonProps) {
+function LevelButton({
+  locked,
+  completed,
+  first,
+  id,
+  nextChallengeId,
+  last,
+}: LevelButtonProps) {
   return (
     <div className="relative flex justify-center items-center w-[98px] h-[93px]">
       <Button
-        href={`/dashboard/challenges?challengeId=${id}`}
         variant={"level"}
         size="level"
-        disabled={locked}
-        aria-label={`link to challenge ${id}`}
+        {...(locked
+          ? { disabled: true }
+          : {
+              "aria-label": `link to challenge ${id}`,
+              href: `/dashboard/challenges?challengeId=${id}&nextChallengeId=${nextChallengeId}`,
+            })}
       >
-        {locked ? (
+        {last ? (
+          <Image src={prizeIcon} alt="" />
+        ) : locked ? (
           <Image src={lockIcon} alt="" />
         ) : first ? (
           <Image src={starIcon} alt="" />
