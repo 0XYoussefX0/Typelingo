@@ -15,9 +15,9 @@ function XpProgress({ xpProgress }: XpProgressProps) {
   let days = [];
 
   let d = new Date();
-  for (let i = 0; i < 7; i++) {
-    d.setDate(d.getDate() - (6 - i));
-    days.push(daysOfWeek[d.getDay()]);
+  for (let i = 6; i >= 0; i--) {
+    days.unshift(daysOfWeek[d.getDay()]);
+    d.setDate(d.getDate() - 1);
   }
 
   const chartData = [];
@@ -37,6 +37,8 @@ function XpProgress({ xpProgress }: XpProgressProps) {
     },
   ];
 
+  console.log(chartData);
+
   return (
     <div className="rounded-2xl p-6 hidden w-[380px] xl:flex xl:flex-col xl:gap-5 border-2 border-solid border-light-grey h-fit">
       <h1 className="font-bold text-[22px] text-dark-grey">XP Progress</h1>
@@ -47,9 +49,11 @@ function XpProgress({ xpProgress }: XpProgressProps) {
           <div className="flex gap-3 items-center">
             <ProgressBar
               progressBarColor="bg-[#FFC800]"
-              currentStepIndex={13 / 20}
+              currentStepIndex={(xpProgress.at(-1) ?? 0) / 20}
             />
-            <div className="text-disabled-grey font-medium">13/20XP </div>
+            <div className="text-disabled-grey font-medium">
+              {xpProgress.at(-1)}/20XP{" "}
+            </div>
           </div>
         </div>
       </div>
