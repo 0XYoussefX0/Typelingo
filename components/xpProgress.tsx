@@ -8,26 +8,53 @@ import ProgressBar from "./ui/progressBar";
 import { ResponsiveLine } from "@nivo/line";
 
 type XpProgressProps = {
-  xpProgress: number[];
+  xpProgress: { date: string; xp: number }[];
 };
 function XpProgress({ xpProgress }: XpProgressProps) {
-  const daysOfWeek = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
-  let days = [];
+  // first loop to get the last 7 days worth of xpProgress
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // set time to start of day
 
-  let d = new Date();
-  for (let i = 6; i >= 0; i--) {
-    days.unshift(daysOfWeek[d.getDay()]);
-    d.setDate(d.getDate() - 1);
-  }
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(today.getDate() - 7);
+  sevenDaysAgo.setHours(0, 0, 0, 0); // set time to start of day
 
-  const chartData = [];
+  // Filter out xpProgress older than 7 days and merge XP for the same dates
+  const mergedXpProgress: { date: string; xp: number }[] = xpProgress
+    .filter(({ date }) => new Date(date) >= sevenDaysAgo)
+    .reduce((acc: { date: string; xp: number }[], { date, xp }) => {
+      const formattedDate = date.split(" ").slice(0, 4).join(" ");
+      const existing = acc.find((item) => item.date === formattedDate);
+      if (existing) {
+        existing.xp += xp;
+      } else {
+        acc.push({ date: formattedDate, xp });
+      }
+      return acc;
+    }, []);
 
+  // Fill in missing days with 0 XP
   for (let i = 0; i < 7; i++) {
-    chartData.push({
-      x: days[i],
-      y: xpProgress[i],
-    });
+    const date = new Date();
+    date.setDate(today.getDate() - i);
+    date.setHours(0, 0, 0, 0); // set time to start of day
+    const formattedDate = date.toString().split(" ").slice(0, 4).join(" ");
+    if (!mergedXpProgress.some((item) => item.date === formattedDate)) {
+      mergedXpProgress.push({ date: formattedDate, xp: 0 });
+    }
   }
+
+  // Sort by date
+  // @ts-ignore
+  mergedXpProgress.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  // Create chart data
+  const chartData = mergedXpProgress.map(({ date, xp }) => ({
+    x: date.slice(0, 2),
+    y: xp,
+  }));
+
+  const todaysXp = mergedXpProgress[6].xp;
 
   const data = [
     {
@@ -36,8 +63,6 @@ function XpProgress({ xpProgress }: XpProgressProps) {
       data: chartData,
     },
   ];
-
-  console.log(chartData);
 
   return (
     <div className="rounded-2xl p-6 hidden w-[380px] xl:flex xl:flex-col xl:gap-5 border-2 border-solid border-light-grey h-fit">
@@ -49,10 +74,10 @@ function XpProgress({ xpProgress }: XpProgressProps) {
           <div className="flex gap-3 items-center">
             <ProgressBar
               progressBarColor="bg-[#FFC800]"
-              currentStepIndex={(xpProgress.at(-1) ?? 0) / 20}
+              currentStepIndex={todaysXp / 20}
             />
             <div className="text-disabled-grey font-medium">
-              {xpProgress.at(-1)}/20XP{" "}
+              {todaysXp}/20XP{" "}
             </div>
           </div>
         </div>
@@ -60,11 +85,11 @@ function XpProgress({ xpProgress }: XpProgressProps) {
       <div className="h-[220px]">
         <ResponsiveLine
           data={data}
-          margin={{ top: 10, right: 10, bottom: 30, left: 50 }}
+          margin={{ top: 10, right: 15, bottom: 30, left: 50 }}
           xScale={{ type: "point" }}
           yScale={{
             type: "linear",
-            max: 1000,
+            max: 20,
             min: 0,
             stacked: true,
           }}
