@@ -8,6 +8,7 @@ import { typesForTesting } from "@/lib/types";
 import { create } from "zustand";
 
 import { challengeStatusStore } from "../challengeBanner";
+import { useEffect } from "react";
 
 type EditorRefStore = {
   editorRef: editor.IStandaloneCodeEditor | null;
@@ -30,6 +31,7 @@ function CodeEditor({ challengeCode }: CodeEditorProps) {
     (state) => state.setChallengeStatus
   );
 
+  const editorRef = editorRefStore((state) => state.editorRef);
   const setEditorRef = editorRefStore((state) => state.setEditorRef);
 
   function handleEditorWillMount(monaco: Monaco) {
@@ -54,7 +56,7 @@ function CodeEditor({ challengeCode }: CodeEditorProps) {
       onChange={handleEditorChange}
       height="40vh"
       defaultLanguage="typescript"
-      defaultValue={challengeCode}
+      value={challengeCode}
       beforeMount={handleEditorWillMount}
       onMount={handleEditorDidMount}
     />
