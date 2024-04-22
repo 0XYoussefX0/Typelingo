@@ -13,7 +13,7 @@ type LevelButtonProps = {
   completed: boolean;
   first: boolean;
   id: number;
-  nextChallengeId: number;
+  nextChallengesIds: string;
   last: boolean;
 };
 function LevelButton({
@@ -21,7 +21,7 @@ function LevelButton({
   completed,
   first,
   id,
-  nextChallengeId,
+  nextChallengesIds,
   last,
 }: LevelButtonProps) {
   return (
@@ -33,7 +33,7 @@ function LevelButton({
           ? { disabled: true }
           : {
               "aria-label": `link to challenge ${id}`,
-              href: `/dashboard/challenges?challengeId=${id}&nextChallengeId=${nextChallengeId}`,
+              href: `/dashboard/challenges?challengeId=${id}&nextChallengesIds=${nextChallengesIds}`,
             })}
       >
         {last ? (
@@ -42,10 +42,12 @@ function LevelButton({
           <Image src={lockIcon} alt="" />
         ) : first ? (
           <Image src={starIcon} alt="" />
-        ) : null}
+        ) : (
+          <div className="w-[30px] h-[29px]"></div>
+        )}
       </Button>
 
-      {first && (
+      {first && !completed && (
         <div className="absolute -top-1/2 right-1/2 animate border-solid border-2 border-light-grey text-[#58CC02] p-3.5 bg-white font-bold rounded-[10px]">
           START
         </div>

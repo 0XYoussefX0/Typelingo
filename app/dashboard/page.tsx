@@ -15,11 +15,7 @@ import { createClient } from "@/lib/supabase/server";
 import { User } from "@supabase/supabase-js";
 import { Enums } from "@/lib/database.types";
 
-type ChallengeWithNextId = {
-  id: number;
-  type: Enums<"challenge_type">;
-  nextChallengeId: number;
-};
+type ChallengeIdentifier = { [P in "id" | "type"]: Challenge[P] };
 
 async function Page() {
   const supabase = createClient();
@@ -48,19 +44,19 @@ async function Page() {
     return <div>Error</div>;
   }
 
-  const easyChallenges: ChallengeWithNextId[] = [];
-  const mediumChallenges: ChallengeWithNextId[] = [];
-  const hardChallenges: ChallengeWithNextId[] = [];
-  const extremeChallenges: ChallengeWithNextId[] = [];
+  const easyChallenges: ChallengeIdentifier[] = [];
+  const mediumChallenges: ChallengeIdentifier[] = [];
+  const hardChallenges: ChallengeIdentifier[] = [];
+  const extremeChallenges: ChallengeIdentifier[] = [];
 
   challengesData.sort((a, b) => a.id - b.id);
 
-  for (let i = 0; i < challengesData.length; i++) {
-    const challenge: ChallengeWithNextId = {
-      ...challengesData[i],
-      nextChallengeId:
-        challengesData[i === challengesData.length - 1 ? 0 : i + 1].id,
-    };
+  const nextChallengesIds = challengesData.map((challenge) => challenge.id);
+  const encodedNextChallengesIds = Buffer.from(
+    JSON.stringify(nextChallengesIds)
+  ).toString("base64");
+
+  for (const challenge of challengesData) {
     if (challenge.type === "easy") {
       easyChallenges.push(challenge);
     } else if (challenge.type === "medium") {
@@ -71,6 +67,8 @@ async function Page() {
       extremeChallenges.push(challenge);
     }
   }
+
+  console.log(data.xp);
 
   /* make sure that you give each nav element an aria label like primary navigation and secondary navigation or something like that */
   return (
@@ -129,14 +127,28 @@ async function Page() {
                 bannerText="Solidify your TypeScript foundation with these basic challenges."
               />
               <LevelsLayout>
-                {easyChallenges.map(({ id, nextChallengeId }, index) => {
+                {easyChallenges.map(({ id }, index) => {
                   const completed = data.levels_completed.includes(id);
+                  const skipped = data.levels_skipped.includes(id);
+
+                  const lastChallengeCompletedOrSkipped =
+                    data.levels_completed.includes(
+                      easyChallenges[index === 0 ? 0 : index - 1].id
+                    ) ||
+                    data.levels_skipped.includes(
+                      easyChallenges[index === 0 ? 0 : index - 1].id
+                    );
+
                   return (
                     <LevelButton
-                      nextChallengeId={nextChallengeId}
+                      nextChallengesIds={encodedNextChallengesIds}
                       key={id}
                       id={id}
-                      locked={index === 0 ? false : !completed}
+                      locked={
+                        index === 0 || lastChallengeCompletedOrSkipped
+                          ? false
+                          : !completed && !skipped
+                      }
                       completed={completed}
                       first={index === 0}
                       last={index === easyChallenges.length - 1}
@@ -152,14 +164,27 @@ async function Page() {
                 bannerText="Dive deeper into TypeScript with these moderately complex exercises."
               />
               <LevelsLayout>
-                {mediumChallenges.map(({ id, nextChallengeId }, index) => {
+                {mediumChallenges.map(({ id }, index) => {
                   const completed = data.levels_completed.includes(id);
+                  const skipped = data.levels_skipped.includes(id);
+
+                  const lastChallengeCompletedOrSkipped =
+                    data.levels_completed.includes(
+                      mediumChallenges[index === 0 ? 0 : index - 1].id
+                    ) ||
+                    data.levels_skipped.includes(
+                      mediumChallenges[index === 0 ? 0 : index - 1].id
+                    );
                   return (
                     <LevelButton
-                      nextChallengeId={nextChallengeId}
+                      nextChallengesIds={encodedNextChallengesIds}
                       key={id}
                       id={id}
-                      locked={index === 0 ? false : !completed}
+                      locked={
+                        index === 0 || lastChallengeCompletedOrSkipped
+                          ? false
+                          : !completed && !skipped
+                      }
                       completed={completed}
                       first={index === 0}
                       last={index === mediumChallenges.length - 1}
@@ -175,14 +200,28 @@ async function Page() {
                 bannerText="Push your TypeScript skills with these advanced challenges."
               />
               <LevelsLayout>
-                {hardChallenges.map(({ id, nextChallengeId }, index) => {
+                {hardChallenges.map(({ id }, index) => {
                   const completed = data.levels_completed.includes(id);
+
+                  const skipped = data.levels_skipped.includes(id);
+
+                  const lastChallengeCompletedOrSkipped =
+                    data.levels_completed.includes(
+                      mediumChallenges[index === 0 ? 0 : index - 1].id
+                    ) ||
+                    data.levels_skipped.includes(
+                      mediumChallenges[index === 0 ? 0 : index - 1].id
+                    );
                   return (
                     <LevelButton
-                      nextChallengeId={nextChallengeId}
+                      nextChallengesIds={encodedNextChallengesIds}
                       key={id}
                       id={id}
-                      locked={index === 0 ? false : !completed}
+                      locked={
+                        index === 0 || lastChallengeCompletedOrSkipped
+                          ? false
+                          : !completed && !skipped
+                      }
                       completed={completed}
                       first={index === 0}
                       last={index === hardChallenges.length - 1}
@@ -198,14 +237,27 @@ async function Page() {
                 bannerText="Master the edge cases of TypeScript with these extreme puzzles."
               />
               <LevelsLayout>
-                {extremeChallenges.map(({ id, nextChallengeId }, index) => {
+                {extremeChallenges.map(({ id }, index) => {
                   const completed = data.levels_completed.includes(id);
+                  const skipped = data.levels_skipped.includes(id);
+
+                  const lastChallengeCompletedOrSkipped =
+                    data.levels_completed.includes(
+                      mediumChallenges[index === 0 ? 0 : index - 1].id
+                    ) ||
+                    data.levels_skipped.includes(
+                      mediumChallenges[index === 0 ? 0 : index - 1].id
+                    );
                   return (
                     <LevelButton
-                      nextChallengeId={nextChallengeId}
+                      nextChallengesIds={encodedNextChallengesIds}
                       key={id}
                       id={id}
-                      locked={index === 0 ? false : !completed}
+                      locked={
+                        index === 0 || lastChallengeCompletedOrSkipped
+                          ? false
+                          : !completed && !skipped
+                      }
                       completed={completed}
                       first={index === 0}
                       last={index === extremeChallenges.length - 1}
@@ -215,7 +267,7 @@ async function Page() {
               </LevelsLayout>
             </div>
           </div>
-          <XpProgress xpProgress={data.xp as number[]} />
+          <XpProgress xpProgress={data.xp} />
         </div>
       </main>
     </div>
