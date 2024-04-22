@@ -28,6 +28,9 @@ import { typesForTesting } from "@/lib/types";
 import { editorRefStore } from "./ui/codeEditor";
 import { useEffect } from "react";
 
+import { createClient } from "@/lib/supabase/client";
+import { User } from "@supabase/supabase-js";
+
 type ChallengeStatusStore = {
   challengeStatus: "passed" | "failed" | "pending" | "exit" | undefined;
   setChallengeStatus: (status: ChallengeStatusStore["challengeStatus"]) => void;
@@ -43,6 +46,9 @@ type ChallengeBannerProps = {
   videoSolutionLink: string;
   challengeType: Challenge["type"];
   children: React.ReactNode;
+  user: User;
+  nextChallengeId: number;
+  encodedNextChallengesIds: string;
 };
 
 function ChallengeBannner({
@@ -50,7 +56,10 @@ function ChallengeBannner({
   challengeName,
   videoSolutionLink,
   challengeType,
+  user,
   children,
+  nextChallengeId,
+  encodedNextChallengesIds,
 }: ChallengeBannerProps) {
   const challengeStatus = challengeStatusStore(
     (state) => state.challengeStatus
@@ -58,6 +67,8 @@ function ChallengeBannner({
   const setChallengeStatus = challengeStatusStore(
     (state) => state.setChallengeStatus
   );
+
+  const supabase = createClient();
 
   const editorRef = editorRefStore((state) => state.editorRef);
 
@@ -99,17 +110,36 @@ function ChallengeBannner({
     setChallengeStatus(undefined);
   };
 
-  const skip = () => {
-    // update the completed column in the database to skipped
+  const skip = async () => {
+    const { error } = await supabase.rpc("skip_challenge", {
+      challengeid: currentChallengeId,
+      id: user.id,
+    });
+
+    // handle the error
+
+    nextChallenge();
+  };
+
+  const continueToNextChallenge = async () => {
+    const { error } = await supabase.rpc("completed_challenge", {
+      challengeid: currentChallengeId,
+      id: user.id,
+      challenge_xp: {
+        date: String(new Date()),
+        xp: 5,
+      },
+    });
+
+    // handle the error
     nextChallenge();
   };
 
   const nextChallenge = () => {
-    // update the completed column of this challenge in the database
     setChallengeStatus("exit");
     setTimeout(() => {
       router.push(
-        `/dashboard/challenges?challengeId=${currentChallengeId + 1}`
+        `/dashboard/challenges?challengeId=${nextChallengeId}&nextChallengesIds=${encodedNextChallengesIds}`
       );
     }, 0);
   };
@@ -150,7 +180,10 @@ function ChallengeBannner({
               Good Job!!
             </span>
           </div>
-          <Button className="w-[151px]" onClick={() => nextChallenge()}>
+          <Button
+            className="w-[151px]"
+            onClick={() => continueToNextChallenge()}
+          >
             CONTINUE
           </Button>
         </div>
