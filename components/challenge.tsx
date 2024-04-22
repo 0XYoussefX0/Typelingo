@@ -17,8 +17,6 @@ function Challenge({
   challengeTitle,
   challengeDescription,
 }: ChallengeProps) {
-  const editorRef = useRef<editor.IStandaloneCodeEditor>();
-
   const challengeStatus = challengeStatusStore(
     (state) => state.challengeStatus
   );
@@ -38,9 +36,7 @@ function Challenge({
             {challengeDescription}
           </p>
         </div>
-        <div className="rounded-2xl border-2 border-solid border-light-grey w-[80%] h-fit mb-20">
-          <CodeEdtior challengeCode={challengeCode} />
-        </div>
+        <CodeEdtior challengeCode={challengeCode} />
       </div>
     </main>
   );

@@ -26,6 +26,7 @@ import { create } from "zustand";
 import { typesForTesting } from "@/lib/types";
 
 import { editorRefStore } from "./ui/codeEditor";
+import { editor } from "monaco-editor";
 import { useEffect } from "react";
 
 import { createClient } from "@/lib/supabase/client";
@@ -82,7 +83,13 @@ function ChallengeBannner({
   const check = async () => {
     setChallengeStatus("pending");
     if (!editorRef) return;
-    const userCode = editorRef.getValue();
+    let userCode: string = "";
+    if ("getValue" in editorRef) {
+      userCode = editorRef.getValue();
+    } else {
+      userCode = editorRef.state?.doc.toString() ?? "";
+    }
+    console.log(userCode);
 
     const finalCode = typesForTesting + userCode;
 
