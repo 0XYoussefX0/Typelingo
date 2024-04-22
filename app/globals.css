@@ -149,3 +149,8 @@ display: none;
         transform: translateX(200px);
     }
 }
+
+.codeSolutionContainer {
+  overflow-y: auto !important;
+  margin: 0 !important;
+}

@@ -54,7 +54,7 @@ function CodeEditor({ challengeCode }: CodeEditorProps) {
   return (
     <Editor
       onChange={handleEditorChange}
-      height="40vh"
+      height="50vh"
       defaultLanguage="typescript"
       value={challengeCode}
       beforeMount={handleEditorWillMount}

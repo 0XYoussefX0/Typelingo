@@ -14,7 +14,8 @@ async function Page() {
       <Button
         href="/"
         variant={"secondary"}
-        className="text-blue-sky w-fit py-[15px] px-[18px] text-sm absolute top-7 left-7  gap-2 "
+        size={"fit"}
+        className="text-blue-sky py-[15px] px-[18px] text-sm absolute top-7 left-7  gap-2 "
       >
         <Image src={backIcon} alt="" className="w-3.5 fill-white" />
         <span className="pb-0.5">Go back Home</span>
@@ -22,11 +23,12 @@ async function Page() {
       <Button
         href="/login"
         variant={"secondary"}
+        size="fit"
         className="text-blue-sky w-fit py-[15px] px-[18px] text-sm absolute top-7 right-7 "
       >
         Login
       </Button>
-      <div className="flex flex-col items-center gap-7 w-[375px]">
+      <div className="flex flex-col items-center gap-7 w-[90%] sm:w-[375px] mt-[250px] lg:mt-0">
         <h1 className="text-center font-bold text-2xl text-dark-grey">
           Create your profile
         </h1>
@@ -36,7 +38,7 @@ async function Page() {
           <div className="text-disabled-grey font-bold text-[13px]">OR</div>
           <div className="h-0.5 bg-light-grey flex-1"></div>
         </div>
-        <Button variant={"secondary"} className=" gap-2.5">
+        <Button variant={"secondary"} className="gap-2.5" size={"full"}>
           <Image src={githubLogo} alt="Github logo" width="20" height="19.59" />
           <span className="text-[#24292f] text-sm font-bold ">Github</span>
         </Button>

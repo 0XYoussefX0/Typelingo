@@ -11,7 +11,7 @@ export default function Home() {
         <Image src={logo} alt="typelingo's logo" />
       </nav>
       <main className="flex-1 bg-[url('./_assets/starsBg.png')] flex items-center justify-center gap-[140px]">
-        <div>
+        <div className="hidden lg:inline">
           <Image src={planet_icon} alt="" />
         </div>
         <div className="flex items-center flex-col gap-12">

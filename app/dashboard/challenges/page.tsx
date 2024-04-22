@@ -55,7 +55,7 @@ async function Page({
   if (data)
     return (
       <>
-        <div className="flex flex-col w-full h-screen">
+        <div className="flex flex-col w-full">
           <ChallengeProgressBar />
           <Challenge
             challengeTitle={data.name}
@@ -71,7 +71,9 @@ async function Page({
             nextChallengeId={nextChallengeId}
             encodedNextChallengesIds={encodedNextChallengesIds as string}
           >
-            <Code lang="ts">{data.code_solution}</Code>
+            <Code lang="ts" className="codeSolutionContainer">
+              {data.code_solution}
+            </Code>
           </ChallengeBannner>
         </div>
       </>

@@ -108,7 +108,8 @@ function DiscoveryStep() {
         </RadioGroup.Root>
         <Button
           onClick={() => nextStep()}
-          className="mx-auto w-full"
+          size={"full"}
+          className="mx-auto "
           disabled={!Boolean(selectedSource)}
         >
           CONTINUE

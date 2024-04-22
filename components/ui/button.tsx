@@ -22,9 +22,11 @@ const buttonVariants = cva(
           "py-[13.5px] rounded-[31px] enabled:border-[#58CC02] is-enabled:border-[#58CC02] enabled:border-b-[#58A700] is-enabled:border-b-[#58A700] enabled:bg-[#58CC02] is-enabled:bg-[#58CC02] tracking-wider enabled:hover:brightness-110 is-enabled:hover:brightness-110 enabled:active:border-b-0 is-enabled:active:border-b-0 enabled:active:translate-y-1 is-enabled:active:translate-y-1 disabled:border-light-grey disabled:border-b-[#B7B7B7] border-b-8",
       },
       size: {
-        default: "w-[320px]",
+        default: "w-[90vw] sm:w-[320px]",
         fit: "w-fit",
         level: "w-[70px]",
+        full: "w-full",
+        arbitrary: "w-auto",
       },
     },
     defaultVariants: {

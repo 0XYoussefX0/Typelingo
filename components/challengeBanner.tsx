@@ -157,6 +157,7 @@ function ChallengeBannner({
               challengeStatus === "exit" || challengeStatus === "pending"
             }
             variant={"secondary"}
+            size={"arbitrary"}
             className="w-[149px]"
             onClick={() => skip()}
           >
@@ -164,6 +165,7 @@ function ChallengeBannner({
           </Button>
           <Button
             className="w-[159px]"
+            size={"arbitrary"}
             onClick={() => check()}
             disabled={
               challengeStatus === "exit" || challengeStatus === "pending"
@@ -184,13 +186,14 @@ function ChallengeBannner({
           </div>
           <Button
             className="w-[151px]"
+            size={"arbitrary"}
             onClick={() => continueToNextChallenge()}
           >
             CONTINUE
           </Button>
         </div>
       ) : challengeStatus === "failed" ? (
-        <div className="bg-[#FFDADC] h-[140px] border-t-2 border-light-grey border-solid flex justify-between w-full items-center px-[10%]">
+        <div className="bg-[#FFDADC] pt-[45px] border-t-2 border-light-grey border-solid flex justify-between w-full items-center px-[10%]">
           <div className="flex gap-4 items-center">
             <div className="bg-white rounded-full flex items-center justify-center w-[80px] h-[80px]">
               <Image src={XIcon} alt="" />
@@ -209,7 +212,7 @@ function ChallengeBannner({
                   </DialogTrigger>
                   <DialogPortal>
                     <DialogOverlay />
-                    <DialogContent className="fixed left-[50%] top-[50%] z-50 grid w-[40%] h-[90%] bg-white translate-x-[-50%] translate-y-[-50%] gap-4 border p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg">
+                    <DialogContent className="fixed left-[50%] top-[50%] z-50 grid w-[40%] h-[90%] translate-x-[-50%] translate-y-[-50%] gap-4 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg">
                       {children}
                     </DialogContent>
                   </DialogPortal>
@@ -224,7 +227,7 @@ function ChallengeBannner({
                   </DialogTrigger>
                   <DialogPortal>
                     <DialogOverlay />
-                    <DialogContent className="fixed left-[50%] top-[50%] z-50 flex flex-col bg-[#fff] w-[90%] translate-x-[-50%] translate-y-[-50%] gap-4 border p-6 pt-2 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg">
+                    <DialogContent className="fixed left-[50%] top-[50%] z-50 flex flex-col bg-[#fff] w-[70%] translate-x-[-50%] translate-y-[-50%] gap-4 border p-6 pt-2 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg">
                       <DialogClose className=" flex justify-end relative  h-5 ">
                         <Image
                           src={closeIcon}
@@ -271,6 +274,7 @@ function ChallengeBannner({
             <Button
               className="w-[151px] bg-[#FF4347] border-[#FF4347] border-b-[#EE282D]"
               onClick={() => retry()}
+              size={"arbitrary"}
             >
               RETRY
             </Button>
@@ -278,6 +282,7 @@ function ChallengeBannner({
               variant="secondary"
               className="w-[151px] bg-[#fff]"
               onClick={() => skip()}
+              size={"arbitrary"}
             >
               SKIP
             </Button>

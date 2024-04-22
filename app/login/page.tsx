@@ -14,7 +14,8 @@ async function Page() {
       <Button
         href="/"
         variant={"secondary"}
-        className="text-blue-sky w-fit py-[15px] px-[18px] text-sm absolute top-7 left-7  gap-2 "
+        size={"fit"}
+        className="text-blue-sky py-[15px] px-[18px] text-sm absolute top-7 left-7  gap-2 "
       >
         <Image src={backIcon} alt="" className="w-3.5 fill-white" />
         <span className="pb-0.5">Go back Home</span>
@@ -22,11 +23,12 @@ async function Page() {
       <Button
         href="/signUp"
         variant={"secondary"}
-        className="text-blue-sky w-fit py-[15px] px-[18px] text-sm absolute top-7 right-7 "
+        size={"fit"}
+        className="text-blue-sky py-[15px] px-[18px] text-sm absolute top-7 right-7 "
       >
         Sign Up
       </Button>
-      <div className="flex flex-col items-center gap-7 w-[375px]">
+      <div className="flex flex-col items-center gap-7 w-[90%] sm:w-[375px] mt-[250px] lg:mt-0">
         <h1 className="text-center font-bold text-2xl text-dark-grey">
           Log in
         </h1>

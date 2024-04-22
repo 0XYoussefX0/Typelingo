@@ -64,6 +64,8 @@ function XpProgress({ xpProgress }: XpProgressProps) {
     },
   ];
 
+  const maxiumumXp = chartData.reduce((acc, { y }) => Math.max(acc, y), 0);
+
   return (
     <div className="rounded-2xl p-6 hidden w-[380px] xl:flex xl:flex-col xl:gap-5 border-2 border-solid border-light-grey h-fit">
       <h1 className="font-bold text-[22px] text-dark-grey">XP Progress</h1>
@@ -89,7 +91,7 @@ function XpProgress({ xpProgress }: XpProgressProps) {
           xScale={{ type: "point" }}
           yScale={{
             type: "linear",
-            max: 20,
+            max: maxiumumXp < 20 ? 20 : maxiumumXp,
             min: 0,
             stacked: true,
           }}

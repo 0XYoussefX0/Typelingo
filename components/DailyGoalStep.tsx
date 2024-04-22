@@ -35,7 +35,7 @@ function DailyGoalStep() {
       <RadioGroup.Root
         value={dailyGoal}
         onValueChange={setDailyGoal}
-        className="flex flex-col rounded-2xl border-2 border-solid border-light-grey w-[580px] gap-0.5"
+        className="flex flex-col rounded-2xl border-2 border-solid border-light-grey w-full max-w-[580px] sm:w-[580px] gap-0.5"
       >
         {possibleDailyGoals.map(({ id, label, duration }, index) => (
           <RadioGroup.Item
@@ -55,7 +55,7 @@ function DailyGoalStep() {
         ))}
       </RadioGroup.Root>
       <Button
-        className="w-full"
+        size="full"
         disabled={!Boolean(dailyGoal)}
         onClick={() => nextStep()}
       >

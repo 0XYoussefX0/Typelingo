@@ -34,11 +34,11 @@ function Challenge({
           <h1 className="text-center font-bold text-[28px] text-dark-grey">
             {challengeTitle}
           </h1>
-          <p className="font-medium text-[#3C3C3C] text-center mx-[300px]">
+          <p className="font-medium text-[#3C3C3C] text-center w-[70%]">
             {challengeDescription}
           </p>
         </div>
-        <div className="rounded-2xl border-2 border-solid border-light-grey w-[80%] h-fit">
+        <div className="rounded-2xl border-2 border-solid border-light-grey w-[80%] h-fit mb-20">
           <CodeEdtior challengeCode={challengeCode} />
         </div>
       </div>
