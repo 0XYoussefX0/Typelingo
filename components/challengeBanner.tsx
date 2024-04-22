@@ -30,6 +30,7 @@ import { useEffect } from "react";
 
 import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
+import { invalidateCache } from "@/app/_actions/invalidateCache";
 
 type ChallengeStatusStore = {
   challengeStatus: "passed" | "failed" | "pending" | "exit" | undefined;
@@ -115,7 +116,7 @@ function ChallengeBannner({
       challengeid: currentChallengeId,
       id: user.id,
     });
-
+    await invalidateCache("userData");
     // handle the error
 
     nextChallenge();
@@ -130,6 +131,7 @@ function ChallengeBannner({
         xp: 5,
       },
     });
+    await invalidateCache("userData");
 
     // handle the error
     nextChallenge();

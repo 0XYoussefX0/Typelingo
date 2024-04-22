@@ -5,14 +5,26 @@ import ProgressBar from "@/components/ui/progressBar";
 import Image from "next/image";
 import backIcon from "@/app/_assets/backIcon.svg";
 
-import DiscoveryStep from "@/components/DiscoveryStep";
-import DailyGoalStep from "@/components/DailyGoalStep";
-import NotificationsStep from "@/components/NotificationsStep";
-import LinkGithubStep from "@/components/LinkGithubStep";
-
 import { Button } from "@/components/ui/button";
 
 import { useSearchParams, useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+
+// this is necessary to opt out of server side rendering
+
+const DiscoveryStep = dynamic(() => import("@/components/DiscoveryStep"), {
+  ssr: false,
+});
+const DailyGoalStep = dynamic(() => import("@/components/DailyGoalStep"), {
+  ssr: false,
+});
+const NotificationsStep = dynamic(
+  () => import("@/components/NotificationsStep"),
+  { ssr: false }
+);
+const LinkGithubStep = dynamic(() => import("@/components/LinkGithubStep"), {
+  ssr: false,
+});
 
 type AvailableSteps =
   | "DiscoveryStep"
@@ -20,9 +32,12 @@ type AvailableSteps =
   | "NotificationsStep"
   | "LinkGithubStep";
 
-function Page() {
+function GettingStartedPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  if (typeof window === "undefined") {
+    return <div></div>;
+  }
   const step = (searchParams.get("Step") ?? "DiscoveryStep") as AvailableSteps;
 
   // if there is no step param
@@ -64,7 +79,6 @@ function Page() {
   if (step === "DiscoveryStep") {
     currentStepIndex = 1 / 5;
   }
-
   return (
     <div className="flex flex-col w-full h-screen">
       <div className="flex gap-4 justify-center items-center w-screen pt-11">
@@ -109,6 +123,13 @@ function Page() {
       </main>
     </div>
   );
+}
+
+function Page() {
+  if (typeof window === "undefined") {
+    return <div></div>;
+  }
+  return <GettingStartedPage />;
 }
 
 export default Page;

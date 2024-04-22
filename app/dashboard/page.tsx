@@ -13,9 +13,19 @@ import LevelsLayout from "@/components/levelsLayout";
 import XpProgress from "@/components/xpProgress";
 import { createClient } from "@/lib/supabase/server";
 import { User } from "@supabase/supabase-js";
-import { Enums } from "@/lib/database.types";
+import { unstable_cache } from "next/cache";
 
 type ChallengeIdentifier = { [P in "id" | "type"]: Challenge[P] };
+
+const getUserData = unstable_cache(
+  async (supabase, userId) => {
+    return supabase.from("profiles").select("*").eq("userid", userId).single();
+  },
+  ["userData"],
+  {
+    tags: ["userData"],
+  }
+);
 
 async function Page() {
   const supabase = createClient();
@@ -26,11 +36,13 @@ async function Page() {
   // user is going to be defined since this route is protected by the middleware
   const user = userSession.user as User;
 
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("userid", user.id)
-    .single();
+  // const { data, error } = await supabase
+  //   .from("profiles")
+  //   .select("*")
+  //   .eq("userid", user.id)
+  //   .single();
+
+  const { data, error } = await getUserData(supabase, user.id);
 
   if (!data) {
     return <div>User not found</div>;

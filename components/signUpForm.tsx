@@ -10,7 +10,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { TSignUpSchema, signUpSchema } from "@/lib/types";
 import { useToast } from "./ui/use-toast";
 
-import { revalidatePath } from "next/cache";
 import { useRouter } from "next/navigation";
 import { Toaster } from "./ui/toaster";
 
@@ -29,27 +28,32 @@ function SignUpForm() {
 
   const router = useRouter();
 
-  const multiStepFormData: { [key: string]: string | boolean } = {
-    cameFrom: sessionStorage.getItem("selectedSource")
-      ? JSON.parse(sessionStorage.getItem("selectedSource") as string)
-      : "Other",
-    linkedGithub: sessionStorage.getItem("LinkGithub")
-      ? JSON.parse(sessionStorage.getItem("LinkGithub") as string)
-      : false,
-    enabled_notifications: sessionStorage.getItem("activatedNotifications")
-      ? JSON.parse(sessionStorage.getItem("activatedNotifications") as string)
-      : false,
-    goal: sessionStorage.getItem("dailyGoal")
-      ? String(
-          Number(
-            JSON.parse(sessionStorage.getItem("dailyGoal") as string).substring(
-              0,
-              2
+  const isBrowser = typeof window !== "undefined";
+
+  let multiStepFormData: { [key: string]: string | boolean };
+  // this condition is necessary because this component gets server side rendered
+  if (isBrowser) {
+    multiStepFormData = {
+      cameFrom: sessionStorage.getItem("selectedSource")
+        ? JSON.parse(sessionStorage.getItem("selectedSource") as string)
+        : "Other",
+      linkedGithub: sessionStorage.getItem("LinkGithub")
+        ? JSON.parse(sessionStorage.getItem("LinkGithub") as string)
+        : false,
+      enabled_notifications: sessionStorage.getItem("activatedNotifications")
+        ? JSON.parse(sessionStorage.getItem("activatedNotifications") as string)
+        : false,
+      goal: sessionStorage.getItem("dailyGoal")
+        ? String(
+            Number(
+              JSON.parse(
+                sessionStorage.getItem("dailyGoal") as string
+              ).substring(0, 2)
             )
           )
-        )
-      : "10",
-  };
+        : "10",
+    };
+  }
   const onSubmit = async (data: TSignUpSchema) => {
     const response = await fetch("/api/signUp", {
       method: "POST",
@@ -97,7 +101,9 @@ function SignUpForm() {
         title: "Account has been successfully created ",
         description: "Welcome to TypeLingo",
       });
-      sessionStorage.clear();
+      if (isBrowser) {
+        sessionStorage.clear();
+      }
       router.push("/dashboard");
     }
 

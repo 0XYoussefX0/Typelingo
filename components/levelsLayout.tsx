@@ -1,6 +1,6 @@
 import React from "react";
 
-function LevelsLayout({ children }) {
+function LevelsLayout({ children }: { children: React.ReactNode }) {
   return <div className="levelsLayoutContainer">{children}</div>;
 }
 

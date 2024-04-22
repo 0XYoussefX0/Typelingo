@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
-import { Enums } from "@/lib/database.types";
+import { Enums } from "@/lib/database";
 
 export async function POST(request: Request) {
 
