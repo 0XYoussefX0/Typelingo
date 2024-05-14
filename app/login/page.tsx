@@ -8,6 +8,7 @@ import githubLogo from "@/app/_assets/githubLogo.svg";
 import backIcon from "@/app/_assets/blBackIcon.svg";
 
 import LoginForm from "@/components/loginForm";
+import GithubSignIn from "@/components/githubSignIn";
 async function Page() {
   return (
     <main className="relative flex justify-center items-center h-screen">
@@ -38,10 +39,7 @@ async function Page() {
           <div className="text-disabled-grey font-bold text-[13px]">OR</div>
           <div className="h-0.5 bg-light-grey flex-1"></div>
         </div>
-        <Button variant={"secondary"} className=" gap-2.5">
-          <Image src={githubLogo} alt="Github logo" width="20" height="19.59" />
-          <span className="text-[#24292f] text-sm font-bold ">Github</span>
-        </Button>
+        <GithubSignIn />
         <p className="text-center text-disabled-grey font-medium text-[15px]">
           By signing in to Duolingo, you agree to our{" "}
           <Link

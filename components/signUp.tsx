@@ -1,6 +1,6 @@
 "use client";
 import SignUpForm from "./signUpForm";
-import GithubSignUp from "./githubSignUp";
+import GithubSignIn from "./githubSignIn";
 
 function SignUp() {
   if (typeof window !== "object") {
@@ -8,7 +8,7 @@ function SignUp() {
   }
   const linkGithub = sessionStorage.getItem("LinkGithub") ?? "false";
 
-  return <>{JSON.parse(linkGithub) ? <GithubSignUp /> : <SignUpForm />}</>;
+  return <>{JSON.parse(linkGithub) ? <GithubSignIn /> : <SignUpForm />}</>;
 }
 
 export default SignUp;

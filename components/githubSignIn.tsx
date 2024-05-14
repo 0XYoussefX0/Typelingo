@@ -3,9 +3,8 @@ import { Button } from "./ui/button";
 import Image from "next/image";
 import githubLogo from "@/app/_assets/githubLogo.svg";
 import { createClient } from "@/lib/supabase/client";
-import { useEffect } from "react";
 
-function GithubSignUp() {
+function GithubSignIn() {
   const supabase = createClient();
 
   const handleGithubSignUp = () => {
@@ -31,4 +30,4 @@ function GithubSignUp() {
   );
 }
 
-export default GithubSignUp;
+export default GithubSignIn;
