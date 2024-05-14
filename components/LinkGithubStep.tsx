@@ -17,16 +17,15 @@ function LinkGithubStep() {
   };
 
   return (
-    <div className="flex flex-col gap-11 items-center">
+    <div className="flex flex-col gap-11 items-center w-[90%] sm:w-[640px]">
       <h1 className="text-center font-bold text-[28px] text-dark-grey">
-        Interested in linking your GitHub profile? It allows automatic commits
-        of your solutions to a repo and enables you to showcase your challenge
-        completion count.
+        Interested in signing up using your GitHub profile? It allows automatic
+        commits of your solutions to a repo.
       </h1>
       <div className="flex flex-col gap-4">
         <Button onClick={() => nextStep("granted")}>YES</Button>
         <Button variant={"secondary"} onClick={() => nextStep()}>
-          NOT NOW
+          NO
         </Button>
       </div>
     </div>

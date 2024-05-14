@@ -1,12 +1,11 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
+import SignUp from "@/components/signUp";
 
 import Image from "next/image";
 import Link from "next/link";
 
-import githubLogo from "@/app/_assets/githubLogo.svg";
 import backIcon from "@/app/_assets/blBackIcon.svg";
-import SignUpForm from "@/components/signUpForm";
 
 async function Page() {
   return (
@@ -32,16 +31,7 @@ async function Page() {
         <h1 className="text-center font-bold text-2xl text-dark-grey">
           Create your profile
         </h1>
-        <SignUpForm />
-        <div className="flex gap-2 items-center w-full">
-          <div className="h-0.5 bg-light-grey flex-1"></div>
-          <div className="text-disabled-grey font-bold text-[13px]">OR</div>
-          <div className="h-0.5 bg-light-grey flex-1"></div>
-        </div>
-        <Button variant={"secondary"} className="gap-2.5" size={"full"}>
-          <Image src={githubLogo} alt="Github logo" width="20" height="19.59" />
-          <span className="text-[#24292f] text-sm font-bold ">Github</span>
-        </Button>
+        <SignUp />
         <p className="text-center text-disabled-grey font-medium text-[15px]">
           By signing in to Duolingo, you agree to our{" "}
           <Link

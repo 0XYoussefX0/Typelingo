@@ -6,54 +6,62 @@ import { revalidatePath } from "next/cache";
 import { Enums } from "@/lib/database";
 
 export async function POST(request: Request) {
+  const body: unknown = await request.json();
 
-    const body: unknown = await request.json();
-
-    if (typeof body === 'object' && body !== null && 'signUpFormData' in body) {
-        const result = signUpSchema.safeParse(body.signUpFormData)
-        let zodErrors: { [key: string]: string[] | undefined } = {}
-        if(!result.success) {
-            const errors = result.error.flatten().fieldErrors
-            for(const property in errors) {
-                const key = property as keyof typeof errors
-                zodErrors[key] = errors[key]
-            }
-            return NextResponse.json({ errors: zodErrors })
-        }
-    
-        const supabase = createClient()
-    
-        const {error: signUpError, data: user} = await supabase.auth.signUp(
-            {
-            email: result.data.email,
-            password: result.data.password
-        }
-        )
-
-if('multiStepFormData' in body && user.user) {   
-    const { cameFrom, linkedGithub, enabled_notifications, goal } = body.multiStepFormData as { cameFrom: Enums<"social_media">, linkedGithub: boolean, enabled_notifications: boolean, goal: Enums<"goal"> }
-    
-    const { error: profilesError } = await supabase
-    .from('profiles')
-    .insert({ name: result.data.name, userid: user.user.id, camefrom: cameFrom, linkedgithub: linkedGithub, enabled_notifications, goal, levels_completed: [], levels_skipped: [], xp: [{date: String(new Date()), xp: 0}]})
-
-    // handle profilesError
-}
-
-
-        
-    
-        if(signUpError) {
-           return NextResponse.json("Something went wrong, please try again", {status: 500})
-        }
-
-
-    
-        revalidatePath("/", "layout");
-        return NextResponse.json({ success: true }, { status: 200 })
+  if (typeof body === "object" && body !== null && "signUpFormData" in body) {
+    const result = signUpSchema.safeParse(body.signUpFormData);
+    let zodErrors: { [key: string]: string[] | undefined } = {};
+    if (!result.success) {
+      const errors = result.error.flatten().fieldErrors;
+      for (const property in errors) {
+        const key = property as keyof typeof errors;
+        zodErrors[key] = errors[key];
       }
-      else {
-        return NextResponse.json("Invalid request", {status: 400})
-      }
+      return NextResponse.json({ errors: zodErrors });
+    }
 
+    const supabase = createClient();
+
+    const { error: signUpError, data: user } = await supabase.auth.signUp({
+      email: result.data.email,
+      password: result.data.password,
+    });
+
+    if ("multiStepFormData" in body && user.user) {
+      const { cameFrom, linkedGithub, enabled_notifications, goal } =
+        body.multiStepFormData as {
+          cameFrom: Enums<"social_media">;
+          linkedGithub: boolean;
+          enabled_notifications: boolean;
+          goal: Enums<"goal">;
+        };
+
+      const { error: profilesError } = await supabase
+        .from("profiles")
+        .insert({
+          name: result.data.name,
+          userid: user.user.id,
+          camefrom: cameFrom,
+          linkedgithub: linkedGithub,
+          enabled_notifications,
+          goal,
+          levels_completed: [],
+          levels_skipped: [],
+          xp: [{ date: String(new Date()), xp: 0 }],
+        });
+
+      // handle profilesError
+    }
+
+    if (signUpError) {
+      return NextResponse.json("Something went wrong, please try again", {
+        status: 500,
+      });
+    }
+
+    revalidatePath("/", "layout");
+    return NextResponse.json({ success: true }, { status: 200 });
+  } else {
+    return NextResponse.json("Invalid request", { status: 400 });
+  }
 }

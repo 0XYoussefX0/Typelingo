@@ -5,12 +5,12 @@ export async function POST(request: Request) {
 
 project.fileSystem.writeFileSync("MyClass.ts", res.code);
 
-const program = project.createProgram({
+let program = project.createProgram({
   rootNames: ["MyClass.ts"],
   options: {},
 });
 
-const diagnostics = program.getSemanticDiagnostics();
+const diagnostics = program.getSemanticDiagnostics(); 
 
 return Response.json({ solution: diagnostics.length > 0 ? "incorrect" : "correct" });
 }

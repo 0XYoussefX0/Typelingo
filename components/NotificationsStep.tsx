@@ -29,14 +29,14 @@ function NotificationsStep() {
   };
 
   return (
-    <div className="flex flex-col gap-11 items-center">
+    <div className="flex flex-col gap-11 items-center w-[90%] sm:w-[640px]">
       <h1 className="text-center font-bold text-[28px] text-dark-grey">
         Want us to help you keep your daily goal?
       </h1>
       <div className="flex flex-col gap-4">
         <Button onClick={() => getUserPermission()}>YES</Button>
         <Button variant={"secondary"} onClick={() => nextStep()}>
-          NOT NOW
+          NO
         </Button>
       </div>
     </div>

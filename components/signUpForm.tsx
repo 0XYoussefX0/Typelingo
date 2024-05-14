@@ -142,7 +142,8 @@ function SignUpForm() {
         )}
         <Button
           disabled={isSubmitting}
-          className="bg-blue-sky border-blue-sky border-b-dark-blue-sky mt-2 w-full"
+          size={"full"}
+          className="bg-blue-sky border-blue-sky border-b-dark-blue-sky mt-2"
         >
           {isSubmitting ? "SUBMITTING..." : "CREATE ACCOUNT"}
         </Button>
