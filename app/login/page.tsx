@@ -39,7 +39,7 @@ async function Page() {
           <div className="text-disabled-grey font-bold text-[13px]">OR</div>
           <div className="h-0.5 bg-light-grey flex-1"></div>
         </div>
-        <GithubSignIn />
+        <GithubSignIn signUp={false} />
         <p className="text-center text-disabled-grey font-medium text-[15px]">
           By signing in to Duolingo, you agree to our{" "}
           <Link

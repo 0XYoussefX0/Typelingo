@@ -8,7 +8,11 @@ function SignUp() {
   }
   const linkGithub = sessionStorage.getItem("LinkGithub") ?? "false";
 
-  return <>{JSON.parse(linkGithub) ? <GithubSignIn /> : <SignUpForm />}</>;
+  return (
+    <>
+      {JSON.parse(linkGithub) ? <GithubSignIn signUp={true} /> : <SignUpForm />}
+    </>
+  );
 }
 
 export default SignUp;
