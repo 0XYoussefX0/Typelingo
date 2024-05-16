@@ -42,7 +42,7 @@ function GithubSignIn({ signUp }: { signUp: boolean }) {
     supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
-        redirectTo: `http://localhost:3000/api/auth?next=${"/dashboard"}&&signUp=${signUp}&&multiStepFormData=${JSON.stringify(
+        redirectTo: `http://localhost:3000/api/github?next=${"/dashboard"}&&signUp=${signUp}&&multiStepFormData=${JSON.stringify(
           multiStepFormData
         )}`,
         scopes: "public_repo",

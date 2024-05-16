@@ -26,12 +26,11 @@ import { create } from "zustand";
 import { typesForTesting } from "@/lib/types";
 
 import { editorRefStore } from "./ui/codeEditor";
-import { editor } from "monaco-editor";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { createClient } from "@/lib/supabase/client";
-import { User } from "@supabase/supabase-js";
 import { invalidateCache } from "@/app/_actions/invalidateCache";
+import { Session, User } from "@supabase/supabase-js";
 
 type ChallengeStatusStore = {
   challengeStatus: "passed" | "failed" | "pending" | "exit" | undefined;
@@ -48,8 +47,9 @@ type ChallengeBannerProps = {
   videoSolutionLink: string;
   challengeType: Challenge["type"];
   children: React.ReactNode;
-  user: User;
   nextChallengeId: number;
+  user: User;
+  challengeDescription: string;
   encodedNextChallengesIds: string;
 };
 
@@ -58,11 +58,16 @@ function ChallengeBannner({
   challengeName,
   videoSolutionLink,
   challengeType,
-  user,
   children,
+  user,
+  challengeDescription,
   nextChallengeId,
   encodedNextChallengesIds,
 }: ChallengeBannerProps) {
+  const supabase = createClient();
+
+  const router = useRouter();
+
   const challengeStatus = challengeStatusStore(
     (state) => state.challengeStatus
   );
@@ -70,15 +75,11 @@ function ChallengeBannner({
     (state) => state.setChallengeStatus
   );
 
-  const supabase = createClient();
-
-  const editorRef = editorRefStore((state) => state.editorRef);
-
-  const router = useRouter();
-
   useEffect(() => {
     setChallengeStatus(undefined);
   }, [currentChallengeId]);
+
+  const editorRef = editorRefStore((state) => state.editorRef);
 
   const check = async () => {
     setChallengeStatus("pending");
@@ -130,18 +131,40 @@ function ChallengeBannner({
   };
 
   const continueToNextChallenge = async () => {
-    const { error } = await supabase.rpc("completed_challenge", {
-      challengeid: currentChallengeId,
-      id: user.id,
-      challenge_xp: {
-        date: String(new Date()),
-        xp: 5,
+    if (!editorRef) return;
+    let userCode: string = "";
+    if ("getValue" in editorRef) {
+      userCode = editorRef.getValue();
+    } else {
+      userCode = editorRef.state?.doc.toString() ?? "";
+    }
+    const challengeData = {
+      type: challengeType,
+      name: challengeName,
+      description: challengeDescription,
+      code: userCode,
+    };
+    console.log(challengeData);
+    await fetch("/api/test", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify(challengeData),
     });
-    await invalidateCache("userData");
+    console.log("run");
+    // const { error } = await supabase.rpc("completed_challenge", {
+    //   challengeid: currentChallengeId,
+    //   id: user.id,
+    //   challenge_xp: {
+    //     date: String(new Date()),
+    //     xp: 5,
+    //   },
+    // });
+    // await invalidateCache("userData");
 
     // handle the error
-    nextChallenge();
+    // nextChallenge();
   };
 
   const nextChallenge = () => {

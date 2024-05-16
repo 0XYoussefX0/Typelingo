@@ -4,7 +4,6 @@ import Challenge from "@/components/challenge";
 import ChallengeBannner from "@/components/challengeBanner";
 import ChallengeProgressBar from "@/components/challengeProgressBar";
 import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
 
 async function Page({
   searchParams,
@@ -33,12 +32,11 @@ async function Page({
 
   const supabase = createClient();
 
-  const { data: userSession, error: userSessionError } =
-    await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!userSession?.user) {
-    redirect("/login");
-  }
+  if (!user) return <div>You are not logged in</div>;
 
   const { data, error } = await supabase
     .from("challenges")
@@ -55,7 +53,7 @@ async function Page({
   if (data)
     return (
       <>
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full min-h-screen">
           <ChallengeProgressBar />
           <Challenge
             challengeTitle={data.name}
@@ -67,9 +65,10 @@ async function Page({
             videoSolutionLink={data.video_solution}
             challengeName={data.name}
             challengeType={data.type}
-            user={userSession.user}
+            user={user}
             nextChallengeId={nextChallengeId}
             encodedNextChallengesIds={encodedNextChallengesIds as string}
+            challengeDescription={data.description}
           >
             <Code lang="ts" className="codeSolutionContainer">
               {data.code_solution}

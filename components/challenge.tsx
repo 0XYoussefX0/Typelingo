@@ -27,7 +27,7 @@ function Challenge({
         challengeStatus === "exit" ? "challenge-out" : "challenge-in"
       }`}
     >
-      <div className="flex-1 flex flex-col items-center justify-center gap-10">
+      <div className="flex-1 flex flex-col items-center justify-center gap-10 w-full">
         <div className="flex flex-col gap-5 items-center">
           <h1 className="text-center font-bold text-[28px] text-dark-grey">
             {challengeTitle}
