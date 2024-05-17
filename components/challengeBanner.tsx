@@ -144,27 +144,27 @@ function ChallengeBannner({
       description: challengeDescription,
       code: userCode,
     };
-    console.log(challengeData);
-    await fetch("/api/test", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    if (user.app_metadata.provider === "github") {
+      await fetch("/api/test", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(challengeData),
+      });
+    }
+    const { error } = await supabase.rpc("completed_challenge", {
+      challengeid: currentChallengeId,
+      id: user.id,
+      challenge_xp: {
+        date: String(new Date()),
+        xp: 5,
       },
-      body: JSON.stringify(challengeData),
     });
-    console.log("run");
-    // const { error } = await supabase.rpc("completed_challenge", {
-    //   challengeid: currentChallengeId,
-    //   id: user.id,
-    //   challenge_xp: {
-    //     date: String(new Date()),
-    //     xp: 5,
-    //   },
-    // });
-    // await invalidateCache("userData");
+    await invalidateCache("userData");
 
     // handle the error
-    // nextChallenge();
+    nextChallenge();
   };
 
   const nextChallenge = () => {

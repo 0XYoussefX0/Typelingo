@@ -7,34 +7,14 @@ import { cookies } from "next/headers";
 
 function GithubSignIn({ signUp }: { signUp: boolean }) {
   const supabase = createClient();
-
-  let multiStepFormData: { [key: string]: string | boolean };
+  let camefrom: string;
   if (signUp) {
     const isBrowser = typeof window !== "undefined";
 
     if (isBrowser) {
-      multiStepFormData = {
-        cameFrom: sessionStorage.getItem("selectedSource")
-          ? JSON.parse(sessionStorage.getItem("selectedSource") as string)
-          : "Other",
-        linkedGithub: sessionStorage.getItem("LinkGithub")
-          ? JSON.parse(sessionStorage.getItem("LinkGithub") as string)
-          : false,
-        enabled_notifications: sessionStorage.getItem("activatedNotifications")
-          ? JSON.parse(
-              sessionStorage.getItem("activatedNotifications") as string
-            )
-          : false,
-        goal: sessionStorage.getItem("dailyGoal")
-          ? String(
-              Number(
-                JSON.parse(
-                  sessionStorage.getItem("dailyGoal") as string
-                ).substring(0, 2)
-              )
-            )
-          : "10",
-      };
+      camefrom = sessionStorage.getItem("selectedSource")
+        ? JSON.parse(sessionStorage.getItem("selectedSource") as string)
+        : "Other";
     }
   }
 
@@ -42,8 +22,8 @@ function GithubSignIn({ signUp }: { signUp: boolean }) {
     supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
-        redirectTo: `http://localhost:3000/api/github?next=${"/dashboard"}&&signUp=${signUp}&&multiStepFormData=${JSON.stringify(
-          multiStepFormData
+        redirectTo: `http://localhost:3000/api/github?next=${"/dashboard"}&&signUp=${signUp}&&camefrom=${JSON.stringify(
+          camefrom
         )}`,
         scopes: "public_repo",
       },

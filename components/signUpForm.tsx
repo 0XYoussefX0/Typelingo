@@ -30,36 +30,19 @@ function SignUpForm() {
 
   const isBrowser = typeof window !== "undefined";
 
-  let multiStepFormData: { [key: string]: string | boolean };
+  let camefrom: string;
   // this condition is necessary because this component gets server side rendered
   if (isBrowser) {
-    multiStepFormData = {
-      cameFrom: sessionStorage.getItem("selectedSource")
-        ? JSON.parse(sessionStorage.getItem("selectedSource") as string)
-        : "Other",
-      linkedGithub: sessionStorage.getItem("LinkGithub")
-        ? JSON.parse(sessionStorage.getItem("LinkGithub") as string)
-        : false,
-      enabled_notifications: sessionStorage.getItem("activatedNotifications")
-        ? JSON.parse(sessionStorage.getItem("activatedNotifications") as string)
-        : false,
-      goal: sessionStorage.getItem("dailyGoal")
-        ? String(
-            Number(
-              JSON.parse(
-                sessionStorage.getItem("dailyGoal") as string
-              ).substring(0, 2)
-            )
-          )
-        : "10",
-    };
+    camefrom = sessionStorage.getItem("selectedSource")
+      ? JSON.parse(sessionStorage.getItem("selectedSource") as string)
+      : "Other";
   }
   const onSubmit = async (data: TSignUpSchema) => {
     const response = await fetch("/api/signUp", {
       method: "POST",
       body: JSON.stringify({
         signUpFormData: data,
-        multiStepFormData,
+        camefrom,
       }),
       headers: {
         "Content-Type": "application/json",

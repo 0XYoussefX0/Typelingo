@@ -14,13 +14,13 @@ export async function GET(request: Request) {
   let signUp = searchParams.get("signUp") ?? "true";
   signUp = JSON.parse(signUp);
 
-  let multiStepFormData;
+  let camefrom;
   if (signUp) {
-    multiStepFormData = searchParams.get("multiStepFormData");
-    if (!multiStepFormData) {
+    camefrom = searchParams.get("camefrom");
+    if (!camefrom) {
       return NextResponse.redirect(`${origin}/auth/auth-code-error`);
     }
-    multiStepFormData = JSON.parse(multiStepFormData);
+    camefrom = JSON.parse(camefrom) as Enums<"social_media">;
   }
 
   if (code) {
@@ -32,24 +32,13 @@ export async function GET(request: Request) {
     } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
-      if (signUp && user && session) {
-        const { cameFrom, linkedGithub, enabled_notifications, goal } =
-          multiStepFormData as {
-            cameFrom: Enums<"social_media">;
-            linkedGithub: boolean;
-            enabled_notifications: boolean;
-            goal: Enums<"goal">;
-          };
-
+      if (signUp && user && session && camefrom) {
         const { error: profilesError } = await supabase
           .from("profiles")
           .insert({
             name: user.user_metadata.user_name,
             userid: user.id,
-            camefrom: cameFrom,
-            linkedgithub: linkedGithub,
-            enabled_notifications,
-            goal,
+            camefrom: camefrom,
             levels_completed: [],
             levels_skipped: [],
             xp: [{ date: String(new Date()), xp: 0 }],

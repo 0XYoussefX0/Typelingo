@@ -15,22 +15,11 @@ import dynamic from "next/dynamic";
 const DiscoveryStep = dynamic(() => import("@/components/DiscoveryStep"), {
   ssr: false,
 });
-const DailyGoalStep = dynamic(() => import("@/components/DailyGoalStep"), {
-  ssr: false,
-});
-const NotificationsStep = dynamic(
-  () => import("@/components/NotificationsStep"),
-  { ssr: false }
-);
 const LinkGithubStep = dynamic(() => import("@/components/LinkGithubStep"), {
   ssr: false,
 });
 
-type AvailableSteps =
-  | "DiscoveryStep"
-  | "DailyGoalStep"
-  | "NotificationsStep"
-  | "LinkGithubStep";
+type AvailableSteps = "DiscoveryStep" | "LinkGithubStep";
 
 function GettingStartedPage() {
   const searchParams = useSearchParams();
@@ -43,27 +32,20 @@ function GettingStartedPage() {
   // if there is no step param
   if (!searchParams.get("Step")) {
     sessionStorage.setItem("previousStep", JSON.stringify("DiscoveryStep"));
-    sessionStorage.setItem("currentStepIndex", JSON.stringify(1 / 5));
+    sessionStorage.setItem("currentStepIndex", JSON.stringify(1 / 3));
   }
 
-  const availableSteps = [
-    "DiscoveryStep",
-    "DailyGoalStep",
-    "NotificationsStep",
-    "LinkGithubStep",
-  ];
+  const availableSteps = ["DiscoveryStep", "LinkGithubStep"];
   // if the value of the step param is not in the available steps, redirect to the first step
   if (!availableSteps.includes(step)) {
     sessionStorage.setItem("previousStep", JSON.stringify("DiscoveryStep"));
-    sessionStorage.setItem("currentStepIndex", JSON.stringify(1 / 5));
+    sessionStorage.setItem("currentStepIndex", JSON.stringify(1 / 3));
     router.push("/getting-started?Step=DiscoveryStep");
     return;
   }
 
   const steps = {
     DiscoveryStep: <DiscoveryStep />,
-    DailyGoalStep: <DailyGoalStep />,
-    NotificationsStep: <NotificationsStep />,
     LinkGithubStep: <LinkGithubStep />,
   };
 
@@ -73,11 +55,11 @@ function GettingStartedPage() {
     sessionStorage.getItem("previousStep") ?? JSON.stringify("DiscoveryStep")
   );
   let currentStepIndex = JSON.parse(
-    sessionStorage.getItem("currentStepIndex") ?? JSON.stringify(1 / 5)
+    sessionStorage.getItem("currentStepIndex") ?? JSON.stringify(1 / 3)
   );
 
   if (step === "DiscoveryStep") {
-    currentStepIndex = 1 / 5;
+    currentStepIndex = 1 / 3;
   }
   return (
     <div className="flex flex-col w-full h-screen">
@@ -89,7 +71,7 @@ function GettingStartedPage() {
             ? { href: "/" }
             : {
                 onClick: () => {
-                  currentStepIndex -= 1 / 5;
+                  currentStepIndex -= 1 / 3;
                   sessionStorage.setItem(
                     "currentStepIndex",
                     JSON.stringify(currentStepIndex)

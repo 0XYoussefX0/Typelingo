@@ -7,12 +7,12 @@ import { useRouter } from "next/navigation";
 function LinkGithubStep() {
   const router = useRouter();
   const nextStep = (LinkStatus?: string) => {
-    sessionStorage.setItem("currentStepIndex", JSON.stringify(5 / 5));
+    sessionStorage.setItem("currentStepIndex", JSON.stringify(3 / 3));
     sessionStorage.setItem(
       "LinkGithub",
       JSON.stringify(LinkStatus === "granted")
     );
-    sessionStorage.setItem("previousStep", JSON.stringify("NotificationsStep"));
+    sessionStorage.setItem("previousStep", JSON.stringify("DiscoveryStep"));
     router.push("/signUp");
   };
 

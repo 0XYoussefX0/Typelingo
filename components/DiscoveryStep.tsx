@@ -43,10 +43,10 @@ function DiscoveryStep() {
   const router = useRouter();
 
   const nextStep = () => {
-    sessionStorage.setItem("currentStepIndex", JSON.stringify(2 / 5));
+    sessionStorage.setItem("currentStepIndex", JSON.stringify(2 / 3));
     sessionStorage.setItem("selectedSource", JSON.stringify(selectedSource));
     sessionStorage.setItem("previousStep", JSON.stringify("DiscoveryStep"));
-    router.push("/getting-started?Step=DailyGoalStep");
+    router.push("/getting-started?Step=LinkGithubStep");
   };
 
   return (
