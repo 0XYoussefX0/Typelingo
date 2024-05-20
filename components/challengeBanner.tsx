@@ -90,11 +90,10 @@ function ChallengeBannner({
     } else {
       userCode = editorRef.state?.doc.toString() ?? "";
     }
-    console.log(userCode);
 
     const finalCode = typesForTesting + userCode;
 
-    fetch("/api", {
+    fetch("/api/checkSolution", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -106,10 +105,8 @@ function ChallengeBannner({
       .then((res) => res.json())
       .then((data) => {
         if (data.solution === "correct") {
-          console.log("correct");
           setChallengeStatus("passed");
         } else {
-          console.log("incorrect");
           setChallengeStatus("failed");
         }
       });
@@ -145,7 +142,7 @@ function ChallengeBannner({
       code: userCode,
     };
     if (user.app_metadata.provider === "github") {
-      await fetch("/api/test", {
+      await fetch("/api/github/createFile", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

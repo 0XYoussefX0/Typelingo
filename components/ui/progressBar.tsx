@@ -17,7 +17,6 @@ function ProgressBar({
     setProgress(currentStepIndex * 100);
   }, [currentStepIndex]);
 
-  console.log(currentStepIndex);
   return (
     <Progress.Root
       value={progress}

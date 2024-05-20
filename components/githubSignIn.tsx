@@ -22,7 +22,7 @@ function GithubSignIn({ signUp }: { signUp: boolean }) {
     supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
-        redirectTo: `http://localhost:3000/api/github?next=${"/dashboard"}&&signUp=${signUp}&&camefrom=${JSON.stringify(
+        redirectTo: `http://localhost:3000/api/github/auth?next=${"/dashboard"}&&signUp=${signUp}&&camefrom=${JSON.stringify(
           camefrom
         )}`,
         scopes: "public_repo",

@@ -48,9 +48,7 @@ function SignUpForm() {
         "Content-Type": "application/json",
       },
     });
-    console.log(response);
     const responseData = await response.json();
-    console.log(responseData);
 
     if (response.status === 500) {
       toast({

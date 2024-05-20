@@ -80,8 +80,6 @@ async function Page() {
     }
   }
 
-  console.log(data.xp);
-
   /* make sure that you give each nav element an aria label like primary navigation and secondary navigation or something like that */
   return (
     <div className="flex items-start">

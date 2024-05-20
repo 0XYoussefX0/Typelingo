@@ -1,12 +1,14 @@
 import { Octokit } from "octokit";
 import { createClient } from "@/lib/supabase/server";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   const body = await request.json();
-  console.log(body);
+
   const { name, type, code, description } = body;
 
-  if (!name || !type || !code || !description) return null;
+  if (!name || !type || !code || !description)
+    return NextResponse.json("failure", { status: 400 });
 
   const supabase = createClient();
 
@@ -14,7 +16,7 @@ export async function POST(request: Request) {
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (!session) return null;
+  if (!session) return NextResponse.json("failure", { status: 400 });
 
   const octokit = new Octokit({ auth: session.provider_token });
 
@@ -35,8 +37,8 @@ export async function POST(request: Request) {
       content: content,
     });
 
-    console.log("Dispatch event created: ", data);
+    return NextResponse.json("success", { status: 200 });
   } catch (error) {
-    console.error("Error creating dispatch event: ", error);
+    return NextResponse.json("failure", { status: 500 });
   }
 }

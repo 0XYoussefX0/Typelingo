@@ -44,8 +44,6 @@ async function Page({
     .eq("id", currentChallengeId)
     .single();
 
-  console.log(error);
-
   if (!data) {
     return <div>Challenge not found</div>;
   }
