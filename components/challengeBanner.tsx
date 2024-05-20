@@ -191,7 +191,7 @@ function ChallengeBannner({
       ) : challengeStatus === "passed" ? (
         <div className="bg-[#D7FFB8] h-[140px] border-t-2 border-light-grey border-solid flex justify-between w-full items-center px-[10%]">
           <div className="flex gap-4 items-center">
-            <div className="bg-white rounded-full flex items-center justify-center w-[80px] h-[80px]">
+            <div className="bg-white rounded-full items-center justify-center w-[80px] h-[80px] hidden lg:flex">
               <Image src={checkmarkIcon} alt="" />
             </div>
             <span className="text-[#489D26] font-medium text-2xl">
@@ -207,9 +207,9 @@ function ChallengeBannner({
           </Button>
         </div>
       ) : challengeStatus === "failed" ? (
-        <div className="bg-[#FFDADC] pt-[45px] border-t-2 border-light-grey border-solid flex justify-between w-full items-center px-[10%]">
+        <div className="bg-[#FFDADC] md:h-[140px] gap-5 md:gap-0 py-4 md:py-0 flex-wrap border-t-2 border-light-grey border-solid flex justify-center md:justify-between w-full items-center px-[10%]">
           <div className="flex gap-4 items-center">
-            <div className="bg-white rounded-full flex items-center justify-center w-[80px] h-[80px]">
+            <div className="bg-white rounded-full items-center justify-center w-[80px] h-[80px] hidden lg:flex">
               <Image src={XIcon} alt="" />
             </div>
             <div className="flex flex-col gap-4">
@@ -226,7 +226,7 @@ function ChallengeBannner({
                   </DialogTrigger>
                   <DialogPortal>
                     <DialogOverlay />
-                    <DialogContent className="fixed left-[50%] top-[50%] z-50 grid w-[40%] h-[90%] translate-x-[-50%] translate-y-[-50%] gap-4 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg">
+                    <DialogContent className="fixed left-[50%] top-[50%] z-50 grid w-[90%] lg:w-[40%] h-[90%] translate-x-[-50%] translate-y-[-50%] gap-4 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg">
                       {children}
                     </DialogContent>
                   </DialogPortal>
@@ -241,7 +241,7 @@ function ChallengeBannner({
                   </DialogTrigger>
                   <DialogPortal>
                     <DialogOverlay />
-                    <DialogContent className="fixed left-[50%] top-[50%] z-50 flex flex-col bg-[#fff] w-[70%] translate-x-[-50%] translate-y-[-50%] gap-4 border p-6 pt-2 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg">
+                    <DialogContent className="fixed left-[50%] top-[50%] z-50 flex flex-col bg-[#fff] w-[95%] lg:w-[70%] translate-x-[-50%] translate-y-[-50%] gap-4 border p-6 pt-2 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg">
                       <DialogClose className=" flex justify-end relative  h-5 ">
                         <Image
                           src={closeIcon}
