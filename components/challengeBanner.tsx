@@ -79,19 +79,12 @@ function ChallengeBannner({
     setChallengeStatus(undefined);
   }, [currentChallengeId]);
 
-  const editorRef = editorRefStore((state) => state.editorRef);
-
+  const editorValue = editorRefStore((state) => state.editorValue);
+  console.log(editorValue);
   const check = async () => {
     setChallengeStatus("pending");
-    if (!editorRef) return;
-    let userCode: string = "";
-    if ("getValue" in editorRef) {
-      userCode = editorRef.getValue();
-    } else {
-      userCode = editorRef.state?.doc.toString() ?? "";
-    }
-
-    const finalCode = typesForTesting + userCode;
+    console.log(editorValue);
+    const finalCode = typesForTesting + editorValue;
 
     fetch("/api/checkSolution", {
       method: "POST",
@@ -128,19 +121,13 @@ function ChallengeBannner({
   };
 
   const continueToNextChallenge = async () => {
-    if (!editorRef) return;
-    let userCode: string = "";
-    if ("getValue" in editorRef) {
-      userCode = editorRef.getValue();
-    } else {
-      userCode = editorRef.state?.doc.toString() ?? "";
-    }
     const challengeData = {
       type: challengeType,
       name: challengeName,
       description: challengeDescription,
-      code: userCode,
+      code: editorValue,
     };
+
     if (user.app_metadata.provider === "github") {
       await fetch("/api/github/createFile", {
         method: "POST",

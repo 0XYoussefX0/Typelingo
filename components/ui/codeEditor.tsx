@@ -1,28 +1,24 @@
 "use client";
 
 import { Editor, Monaco } from "@monaco-editor/react";
-import { editor } from "monaco-editor";
 
 import { typesForTesting } from "@/lib/types";
 
 import { create } from "zustand";
 
 import { challengeStatusStore } from "../challengeBanner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
-import { ReactCodeMirrorRef } from "@uiw/react-codemirror";
 
 type EditorRefStore = {
-  editorRef: editor.IStandaloneCodeEditor | ReactCodeMirrorRef | null;
-  setEditorRef: (
-    editor: editor.IStandaloneCodeEditor | ReactCodeMirrorRef | null
-  ) => void;
+  editorValue: string | undefined;
+  setEditorValue: (editor: string | undefined) => void;
 };
 export const editorRefStore = create<EditorRefStore>((set) => ({
-  editorRef: null,
-  setEditorRef: (editor) => set({ editorRef: editor }),
+  editorValue: "",
+  setEditorValue: (value) => set({ editorValue: value }),
 }));
 
 type CodeEditorProps = {
@@ -39,7 +35,12 @@ function CodeEditor({ challengeCode }: CodeEditorProps) {
 
   const [mobileUser, setMobileUser] = useState(false);
 
-  const setEditorRef = editorRefStore((state) => state.setEditorRef);
+  const setEditorValue = editorRefStore((state) => state.setEditorValue);
+  const editorValue = editorRefStore((state) => state.editorValue);
+
+  useEffect(() => {
+    setEditorValue(challengeCode);
+  }, []);
 
   function handleEditorWillMount(monaco: Monaco) {
     monaco.languages.typescript.typescriptDefaults.addExtraLib(
@@ -48,14 +49,12 @@ function CodeEditor({ challengeCode }: CodeEditorProps) {
     );
   }
 
-  const handleEditorDidMount = (editor: editor.IStandaloneCodeEditor) => {
-    setEditorRef(editor);
-  };
-
-  const handleEditorChange = () => {
+  const handleEditorChange = (val: string | undefined) => {
     if (challengeStatus === "failed") {
       setChallengeStatus(undefined);
     }
+    console.log(val);
+    setEditorValue(val);
   };
 
   return (
@@ -72,9 +71,8 @@ function CodeEditor({ challengeCode }: CodeEditorProps) {
     >
       {mobileUser ? (
         <CodeMirror
-          ref={(editor) => setEditorRef(editor)}
           height="50vh"
-          value={challengeCode}
+          value={editorValue}
           extensions={[javascript({ typescript: true })]}
           onChange={handleEditorChange}
           width="80vw"
@@ -84,9 +82,8 @@ function CodeEditor({ challengeCode }: CodeEditorProps) {
           onChange={handleEditorChange}
           height="50vh"
           defaultLanguage="typescript"
-          value={challengeCode}
+          value={editorValue}
           beforeMount={handleEditorWillMount}
-          onMount={handleEditorDidMount}
         />
       )}
     </div>
