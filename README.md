@@ -2,6 +2,8 @@
 
 Welcome to Typelingo! This web app provides an interactive platform for solving TypeScript challenges sourced from the Type-Challenges repository. It's designed to help you practice and improve your TypeScript skills with real-time feedback and access to community solutions.
 
+![demo (2)](https://github.com/0XYoussefX0/Typelingo/assets/151054138/bc1ea88f-ed26-4436-9208-8db0abebec7e)
+
 ## Features
 
 - **Interactive Code Editor**: Solve challenges directly in your browser with our integrated, mobile-friendly code editor.
