@@ -40,7 +40,7 @@ function CodeEditor({ challengeCode }: CodeEditorProps) {
 
   useEffect(() => {
     setEditorValue(challengeCode);
-  }, []);
+  }, [challengeCode]);
 
   function handleEditorWillMount(monaco: Monaco) {
     monaco.languages.typescript.typescriptDefaults.addExtraLib(
